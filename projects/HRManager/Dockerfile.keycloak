@@ -1,41 +1,30 @@
 FROM quay.io/keycloak/keycloak:latest AS builder
 
-# Preconfigure Keycloak for Azure reverse proxy and HTTPS
-ENV KC_PROXY=edge \
-    KC_PROXY_HEADERS=xforwarded \
+# Build optimized image for Cloud Run
+# Supports both PostgreSQL (production) and H2 file-based (default/fallback)
+ENV KC_PROXY_HEADERS=xforwarded \
     KC_HTTP_ENABLED=true \
     KC_HEALTH_ENABLED=true \
-    KC_HOSTNAME_STRICT=false
+    KC_HOSTNAME_STRICT=false \
+    KC_DB=dev-file
 
 # Copy custom HR Manager theme
 COPY ./themes/hr-manager /opt/keycloak/themes/hr-manager
 
-# Build optimized server image (required for production start)
 WORKDIR /opt/keycloak
-RUN /opt/keycloak/bin/kc.sh build
+RUN /opt/keycloak/bin/kc.sh build --db=dev-file
 
 FROM quay.io/keycloak/keycloak:latest
 
-# Copy optimized build artifacts
 COPY --from=builder /opt/keycloak/ /opt/keycloak/
 
-# Runtime environment for Azure Container Apps
-ENV KC_PROXY=edge \
-    KC_PROXY_HEADERS=xforwarded \
+# Runtime defaults (overridable via Cloud Run env vars)
+ENV KC_PROXY_HEADERS=xforwarded \
     KC_HTTP_ENABLED=true \
     KC_HEALTH_ENABLED=true \
-    KC_HOSTNAME_STRICT=false
+    KC_HOSTNAME_STRICT=false \
+    KC_DB=dev-file
 
-# Create volume mount point for persistent data
-VOLUME ["/opt/keycloak/data"]
-
-# Expose Keycloak port
 EXPOSE 8080
 
-# Start Keycloak in production mode with optimized build
 ENTRYPOINT ["/opt/keycloak/bin/kc.sh", "start", "--optimized"]
-
-
-
-
-
