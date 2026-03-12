@@ -125,6 +125,7 @@ jobs:
 
       - name: Deploy backend to Cloud Run
         run: |
+          KC_URL="${{ steps.keycloak.outputs.url }}"
           gcloud run deploy ${{ env.SERVICE_NAME }} \
             --image=${{ env.IMAGE }}:${{ github.sha }} \
             --region=${{ env.REGION }} \
@@ -136,15 +137,7 @@ jobs:
             --min-instances=0 \
             --max-instances=3 \
             --set-secrets="FirebaseStorage__ServiceAccountKeyJson=firebase-sa-key:latest,ConnectionStrings__Database=db-connection-string:latest" \
-            --set-env-vars="ASPNETCORE_ENVIRONMENT=Production" \
-            --update-env-vars="ASPNETCORE_HTTP_PORTS=5000" \
-            --update-env-vars="Keycloak__MetadataAddress=${{ steps.keycloak.outputs.url }}/realms/hr-manager/.well-known/openid-configuration" \
-            --update-env-vars="Keycloak__ValidIssuer=${{ steps.keycloak.outputs.url }}/realms/hr-manager" \
-            --update-env-vars="Keycloak__Audience=account" \
-            --update-env-vars="Cors__AllowedOrigins__0=https://hrmanager-c32f0.web.app" \
-            --update-env-vars="Cors__AllowedOrigins__1=https://hrmanager-c32f0.firebaseapp.com" \
-            --update-env-vars="Cors__AllowedOrigins__2=http://localhost" \
-            --update-env-vars="Cors__AllowedOrigins__3=http://localhost:4200"
+            --set-env-vars="ASPNETCORE_ENVIRONMENT=Production,ASPNETCORE_HTTP_PORTS=5000,Keycloak__MetadataAddress=${KC_URL}/realms/hr-manager/.well-known/openid-configuration,Keycloak__ValidIssuer=${KC_URL}/realms/hr-manager,Keycloak__Audience=account,Cors__AllowedOrigins__0=https://hrmanager-c32f0.web.app,Cors__AllowedOrigins__1=https://hrmanager-c32f0.firebaseapp.com,Cors__AllowedOrigins__2=http://localhost,Cors__AllowedOrigins__3=http://localhost:4200"
 
       - name: Deployment Summary
         run: |
