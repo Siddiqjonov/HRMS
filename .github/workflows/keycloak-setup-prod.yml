@@ -1,0 +1,105 @@
+name: Production Environment Keycloak Setup
+
+on:
+  workflow_dispatch:
+
+env:
+  AZURE_CONTAINER_REGISTRY: hrmanager
+  RESOURCE_GROUP: hr-manager
+  KEYCLOAK_NAME: hr-keycloak-prod
+  KEYCLOAK_HOSTNAME: hr-keycloak-prod.politemeadow-997629b1.westeurope.azurecontainerapps.io
+
+jobs:
+  build-and-deploy-keycloak:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Log in to ACR
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io
+          username: ${{ secrets.AZURE_REGISTRY_USERNAME_PROD }}
+          password: ${{ secrets.AZURE_REGISTRY_PASSWORD_PROD }}
+
+      - name: Build and push Keycloak image
+        uses: docker/build-push-action@v6
+        with:
+          push: true
+          tags: ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/keycloak:latest
+          file: projects/HRManager/Dockerfile.keycloak
+          context: projects/HRManager
+
+      - name: Login to Azure
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS_PROD }}
+
+      - name: Delete existing Keycloak if present
+        uses: azure/CLI@v1
+        with:
+          inlineScript: |
+            if az containerapp show \
+              --name ${{ env.KEYCLOAK_NAME }} \
+              --resource-group ${{ env.RESOURCE_GROUP }} &> /dev/null; then
+              echo "Existing Keycloak found. Deleting..."
+              az containerapp delete \
+                --name ${{ env.KEYCLOAK_NAME }} \
+                --resource-group ${{ env.RESOURCE_GROUP }} \
+                --yes
+              echo "Deleted."
+            else
+              echo "No existing Keycloak found. Proceeding to create."
+            fi
+
+      - name: Create Keycloak Container App
+        uses: azure/CLI@v1
+        with:
+          inlineScript: |
+            CONTAINER_ENV=$(az containerapp env list \
+              --resource-group ${{ env.RESOURCE_GROUP }} \
+              --query "[0].name" -o tsv)
+            echo "Using Container Apps environment: $CONTAINER_ENV"
+
+            az containerapp create \
+              --name ${{ env.KEYCLOAK_NAME }} \
+              --resource-group ${{ env.RESOURCE_GROUP }} \
+              --environment "$CONTAINER_ENV" \
+              --image ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/keycloak:latest \
+              --registry-server ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io \
+              --registry-username ${{ secrets.AZURE_REGISTRY_USERNAME_PROD }} \
+              --registry-password ${{ secrets.AZURE_REGISTRY_PASSWORD_PROD }} \
+              --target-port 8080 \
+              --ingress external \
+              --cpu 2.0 \
+              --memory 4.0Gi \
+              --min-replicas 1 \
+              --max-replicas 1 \
+              --env-vars \
+                KEYCLOAK_ADMIN=admin \
+                "KEYCLOAK_ADMIN_PASSWORD=${{ secrets.KEYCLOAK_ADMIN_PASSWORD_PROD }}" \
+                KC_HTTP_ENABLED=true \
+                KC_HOSTNAME=${{ env.KEYCLOAK_HOSTNAME }} \
+                KC_PROXY_HEADERS=xforwarded \
+                KC_DB=postgres \
+                KC_DB_URL_HOST=${{ fromJson(secrets.POSTGRES_CREDENTIALS_PROD).host }} \
+                KC_DB_URL_PORT=5432 \
+                KC_DB_URL_DATABASE=${{ fromJson(secrets.POSTGRES_CREDENTIALS_PROD).database }} \
+                KC_DB_USERNAME=${{ fromJson(secrets.POSTGRES_CREDENTIALS_PROD).user }} \
+                "KC_DB_PASSWORD=${{ fromJson(secrets.POSTGRES_CREDENTIALS_PROD).password }}" \
+                "KC_DB_URL_PROPERTIES=?sslmode=require"
+
+      - name: Deployment Summary
+        run: |
+          echo "### Keycloak Deployed Successfully" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **Environment:** Production (West Europe)" >> $GITHUB_STEP_SUMMARY
+          echo "- **Container App:** ${{ env.KEYCLOAK_NAME }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Resource Group:** ${{ env.RESOURCE_GROUP }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Image:** ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/keycloak:latest" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Keycloak URL:** https://${{ env.KEYCLOAK_HOSTNAME }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Admin Console:** https://${{ env.KEYCLOAK_HOSTNAME }}/admin" >> $GITHUB_STEP_SUMMARY
+          echo "**Realm:** hr-manager" >> $GITHUB_STEP_SUMMARY

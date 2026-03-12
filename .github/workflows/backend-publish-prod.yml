@@ -1,0 +1,103 @@
+name: Production Environment Backend CI/CD
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'projects/HRManager/src/HrManager.Api/**'
+      - 'projects/HRManager/src/HrManager.Application/**'
+      - 'projects/HRManager/src/HrManager.Domain/**'
+      - 'projects/HRManager/src/HrManager.Infrastructure/**'
+      - 'projects/HRManager/tests/**'
+      - '.github/workflows/backend-publish-prod.yml'
+
+env:
+  AZURE_CONTAINER_REGISTRY: hrmanager
+  CONTAINER_APP_NAME: hrmanager-api-prod
+  RESOURCE_GROUP: hr-manager
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up .NET Core
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "9.0"
+          cache: true
+          cache-dependency-path: 'projects/HRManager/**/*.csproj'
+
+      - name: Restore dependencies
+        run: dotnet restore projects/HRManager/src/HrManager.Api/HrManager.Api.csproj
+
+      - name: Build with dotnet
+        run: dotnet build projects/HRManager/src/HrManager.Api/HrManager.Api.csproj --configuration Release --no-restore
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to ACR
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io
+          username: ${{ secrets.AZURE_REGISTRY_USERNAME_PROD }}
+          password: ${{ secrets.AZURE_REGISTRY_PASSWORD_PROD }}
+
+      - name: Build and push container image to ACR
+        uses: docker/build-push-action@v6
+        with:
+          push: true
+          tags: ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/hrmanagerapi:${{ github.sha }}
+          file: projects/HRManager/src/HrManager.Api/Dockerfile
+          context: .
+
+  run-unit-tests:
+    runs-on: ubuntu-latest
+    needs: build
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up .NET Core
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "9.0"
+          cache: true
+          cache-dependency-path: 'projects/HRManager/**/*.csproj'
+
+      - name: Run unit tests
+        run: dotnet test projects/HRManager/HRManager.sln --configuration Release --verbosity normal
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: run-unit-tests
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS_PROD }}
+
+      - name: Deploy to Azure Container Apps
+        uses: azure/CLI@v1
+        with:
+          inlineScript: |
+            az containerapp update \
+              --name ${{ env.CONTAINER_APP_NAME }} \
+              --resource-group ${{ env.RESOURCE_GROUP }} \
+              --image ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/hrmanagerapi:${{ github.sha }} \
+              --set-env-vars \
+                ASPNETCORE_ENVIRONMENT=Production \
+                "ConnectionStrings__Database=${{ secrets.DATABASE_CONNECTION_STRING_PROD }}" \
+                "FirebaseStorage__ServiceAccountKeyJson=${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON }}"

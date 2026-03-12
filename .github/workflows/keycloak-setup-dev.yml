@@ -1,0 +1,78 @@
+name: Development Environment Keycloak Setup
+
+on:
+  workflow_dispatch:
+
+env:
+  RESOURCE_GROUP_DEV: hrmanager-dev-rg
+  CONTAINER_ENV_DEV: managedEnvironment-hrmanager-dev
+  KEYCLOAK_NAME_DEV: hrmanager-dev-keycloak
+  KEYCLOAK_HOSTNAME_DEV: hrmanager-dev-keycloak.nicecoast-133fb64f.eastasia.azurecontainerapps.io
+
+jobs:
+  deploy-keycloak:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Login to Azure
+      run: |
+        az login --service-principal \
+          -u ${{ fromJson(secrets.AZURE_CREDENTIALS_DEV).clientId }} \
+          -p ${{ fromJson(secrets.AZURE_CREDENTIALS_DEV).clientSecret }} \
+          --tenant ${{ fromJson(secrets.AZURE_CREDENTIALS_DEV).tenantId }}
+
+    - name: Check and delete old Keycloak if exists
+      run: |
+        if az containerapp show --name ${{ env.KEYCLOAK_NAME_DEV }} --resource-group ${{ env.RESOURCE_GROUP_DEV }} &> /dev/null; then
+          echo "Keycloak exists. Deleting..."
+          az containerapp delete \
+            --name ${{ env.KEYCLOAK_NAME_DEV }} \
+            --resource-group ${{ env.RESOURCE_GROUP_DEV }} \
+            --yes
+          echo "Deleted successfully"
+        else
+          echo "Keycloak does not exist. Skipping delete."
+        fi
+
+    - name: Create Keycloak with PostgreSQL
+      run: |
+        az containerapp create \
+          --name ${{ env.KEYCLOAK_NAME_DEV }} \
+          --resource-group ${{ env.RESOURCE_GROUP_DEV }} \
+          --environment ${{ env.CONTAINER_ENV_DEV }} \
+          --image ${{ fromJson(secrets.ACR_CREDENTIALS_DEV).loginServer }}/keycloak:latest \
+          --registry-server ${{ fromJson(secrets.ACR_CREDENTIALS_DEV).loginServer }} \
+          --registry-username ${{ fromJson(secrets.ACR_CREDENTIALS_DEV).username }} \
+          --registry-password ${{ fromJson(secrets.ACR_CREDENTIALS_DEV).password }} \
+          --target-port 8080 \
+          --ingress external \
+          --cpu 2.0 \
+          --memory 4.0Gi \
+          --min-replicas 1 \
+          --max-replicas 1 \
+          --env-vars \
+            KEYCLOAK_ADMIN=admin \
+            KEYCLOAK_ADMIN_PASSWORD=admin \
+            KC_HTTP_ENABLED=true \
+            KC_HOSTNAME=${{ env.KEYCLOAK_HOSTNAME_DEV }} \
+            KC_PROXY_HEADERS=xforwarded \
+            KC_DB=postgres \
+            KC_DB_URL_HOST=${{ fromJson(secrets.POSTGRES_CREDENTIALS_DEV).host }} \
+            KC_DB_URL_PORT=5432 \
+            KC_DB_URL_DATABASE=${{ fromJson(secrets.POSTGRES_CREDENTIALS_DEV).database }} \
+            KC_DB_USERNAME=${{ fromJson(secrets.POSTGRES_CREDENTIALS_DEV).user }} \
+            KC_DB_PASSWORD="${{ fromJson(secrets.POSTGRES_CREDENTIALS_DEV).password }}" \
+            KC_DB_URL_PROPERTIES="?sslmode=require" \
+          --command /opt/keycloak/bin/kc.sh \
+          --args start-dev
+
+    - name: Deployment Complete
+      run: |
+        echo "### Keycloak Deployed Successfully" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "Keycloak deployed and connected to PostgreSQL" >> $GITHUB_STEP_SUMMARY
+        echo "All existing data automatically loaded from database" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "**Keycloak URL:** https://${{ env.KEYCLOAK_HOSTNAME_DEV }}" >> $GITHUB_STEP_SUMMARY
+        echo "**Admin login:** admin / admin" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "If database has existing realm data, it will be preserved" >> $GITHUB_STEP_SUMMARY

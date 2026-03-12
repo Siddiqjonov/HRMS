@@ -1,4 +1,3 @@
-﻿using Azure.Storage.Blobs;
 using HrManager.Application.Common.Interfaces;
 using HrManager.Application.Common.Services;
 using HrManager.Infrastructure.Persistance;
@@ -9,7 +8,6 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Npgsql;
 
 namespace HrManager.Infrastructure;
 
@@ -18,30 +16,20 @@ public static class DependencyInjection
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
         var connectionString = configuration.GetConnectionString("Database");
-        var builder = new NpgsqlConnectionStringBuilder(connectionString);
 
         services.AddDbContext<ApplicationDbContext>((sp, options) =>
-        options.UseNpgsql(builder.ConnectionString)
-            .UseSnakeCaseNamingConvention()
+        options.UseSqlServer(connectionString)
             .AddInterceptors(sp.GetServices<ISaveChangesInterceptor>()));
 
         services.Configure<CorsSettings>(configuration.GetSection("Cors"));
 
-        var azureBlobSettings = new AzureBlobSettings(
-            configuration["AzureBlobSettings:ConnectionString"]!,
-            configuration["AzureBlobSettings:ContainerName"]!);
-        services.AddSingleton(azureBlobSettings);
+        var firebaseStorageSettings = new FirebaseStorageSettings(
+            configuration["FirebaseStorage:BucketName"]!,
+            configuration["FirebaseStorage:ServiceAccountKeyPath"] ?? string.Empty,
+            configuration["FirebaseStorage:ServiceAccountKeyJson"]);
+        services.AddSingleton(firebaseStorageSettings);
 
-        services.AddSingleton<BlobServiceClient>(_ =>
-            new BlobServiceClient(azureBlobSettings.ConnectionString));
-
-        services.AddSingleton(sp =>
-        {
-            var blobService = sp.GetRequiredService<BlobServiceClient>();
-            return blobService.GetBlobContainerClient(azureBlobSettings.ContainerName);
-        });
-
-        services.AddScoped<IStorageService, AzureBlobStorageService>();
+        services.AddScoped<IStorageService, FirebaseStorageService>();
 
         services.AddScoped<IApplicationDbContext, ApplicationDbContext>();
         services.AddScoped<ICurrentUserService, CurrentUserService>();

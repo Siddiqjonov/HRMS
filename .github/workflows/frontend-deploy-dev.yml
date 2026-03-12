@@ -1,0 +1,96 @@
+name: Development Environment Frontend CI/CD
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [development]
+    paths:
+      - 'projects/HRManager/src/Hr.Manager.Web/**'
+
+env:
+  RESOURCE_GROUP_DEV: hrmanager-dev-rg
+  WEBAPP_NAME_DEV: hrmanager-dev-web
+  CONTAINER_ENV_DEV: managedEnvironment-hrmanager-dev
+
+jobs:
+  build-frontend-dev:
+    name: Build Web App
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Login to Azure Container Registry
+      uses: docker/login-action@v3
+      with:
+        registry: ${{ fromJson(secrets.ACR_CREDENTIALS_DEV).loginServer }}
+        username: ${{ fromJson(secrets.ACR_CREDENTIALS_DEV).username }}
+        password: ${{ fromJson(secrets.ACR_CREDENTIALS_DEV).password }}
+
+    - name: Build and push Docker image
+      id: build-image
+      run: |
+        IMAGE_TAG=$(echo ${{ github.sha }} | cut -c1-7)
+        IMAGE_NAME="${{ fromJson(secrets.ACR_CREDENTIALS_DEV).loginServer }}/hrmanagerweb"
+        cd projects/HRManager/src/Hr.Manager.Web
+        docker build -t ${IMAGE_NAME}:${IMAGE_TAG} -t ${IMAGE_NAME}:latest --build-arg CONFIGURATION=development -f Dockerfile .
+        docker push ${IMAGE_NAME}:${IMAGE_TAG}
+        docker push ${IMAGE_NAME}:latest
+        echo "IMAGE_TAG=${IMAGE_TAG}" >> $GITHUB_OUTPUT
+        echo "IMAGE_NAME=${IMAGE_NAME}" >> $GITHUB_OUTPUT
+
+  deploy-frontend-dev:
+    name: Deploy Web App
+    runs-on: ubuntu-latest
+    needs: build-frontend-dev
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Login to Azure
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS_DEV }}
+
+    - name: Set image variables
+      id: set-image
+      run: |
+        IMAGE_TAG=$(echo ${{ github.sha }} | cut -c1-7)
+        IMAGE_NAME="${{ fromJson(secrets.ACR_CREDENTIALS_DEV).loginServer }}/hrmanagerweb"
+        FULL_IMAGE="${IMAGE_NAME}:${IMAGE_TAG}"
+        echo "IMAGE_TAG=${IMAGE_TAG}" >> $GITHUB_ENV
+        echo "IMAGE_NAME=${IMAGE_NAME}" >> $GITHUB_ENV
+        echo "FULL_IMAGE=${FULL_IMAGE}" >> $GITHUB_ENV
+
+    - name: Ensure Container App exists
+      run: |
+        if ! az containerapp show --name ${{ env.WEBAPP_NAME_DEV }} --resource-group ${{ env.RESOURCE_GROUP_DEV }} >/dev/null 2>&1; then
+          az containerapp create \
+            --name ${{ env.WEBAPP_NAME_DEV }} \
+            --resource-group ${{ env.RESOURCE_GROUP_DEV }} \
+            --environment ${{ env.CONTAINER_ENV_DEV }} \
+            --image "${{ env.FULL_IMAGE }}" \
+            --target-port 80 \
+            --ingress external \
+            --cpu 2.0 \
+            --memory 4.0Gi \
+            --min-replicas 1 \
+            --max-replicas 1 \
+            --registry-server ${{ fromJson(secrets.ACR_CREDENTIALS_DEV).loginServer }} \
+            --registry-username ${{ fromJson(secrets.ACR_CREDENTIALS_DEV).username }} \
+            --registry-password ${{ fromJson(secrets.ACR_CREDENTIALS_DEV).password }}
+        fi
+
+    - name: Update Container App Image
+      run: |
+        az containerapp update \
+          --name ${{ env.WEBAPP_NAME_DEV }} \
+          --resource-group ${{ env.RESOURCE_GROUP_DEV }} \
+          --image "${{ env.FULL_IMAGE }}"
+
+    - name: Deployment Summary
+      run: |
+        echo "### Frontend Deployed Successfully" >> $GITHUB_STEP_SUMMARY
+        echo "- Environment: Development" >> $GITHUB_STEP_SUMMARY
+        echo "- Container App: ${{ env.WEBAPP_NAME_DEV }}" >> $GITHUB_STEP_SUMMARY
+        echo "- Image: ${{ env.FULL_IMAGE }}" >> $GITHUB_STEP_SUMMARY
