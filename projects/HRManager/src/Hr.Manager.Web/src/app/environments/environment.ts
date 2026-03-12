@@ -1,6 +1,6 @@
 export const environment = {
     production: true,
-    apiBasePath: 'https://hrmanager-c32f0.web.app/api',
+    apiBasePath: 'BACKEND_URL_PLACEHOLDER',
     authority: 'KEYCLOAK_AUTHORITY_PLACEHOLDER',
     clientId: 'api',
 };

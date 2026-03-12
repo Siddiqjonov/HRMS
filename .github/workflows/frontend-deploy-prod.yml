@@ -30,8 +30,8 @@ jobs:
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v2
 
-      - name: Get Keycloak Cloud Run URL
-        id: keycloak
+      - name: Get Cloud Run URLs
+        id: urls
         run: |
           KC_URL=$(gcloud run services describe hr-keycloak \
             --region=${{ env.REGION }} \
@@ -41,13 +41,26 @@ jobs:
             echo "ERROR: Keycloak service not found. Run keycloak-setup-prod.yml first."
             exit 1
           fi
-          echo "url=${KC_URL}" >> $GITHUB_OUTPUT
+          BACKEND_URL=$(gcloud run services describe hr-manager-api \
+            --region=${{ env.REGION }} \
+            --project=${{ env.PROJECT_ID }} \
+            --format='value(status.url)' 2>/dev/null || echo "")
+          if [ -z "$BACKEND_URL" ]; then
+            echo "ERROR: Backend service not found. Run backend-publish-prod.yml first."
+            exit 1
+          fi
+          echo "keycloak_url=${KC_URL}" >> $GITHUB_OUTPUT
+          echo "backend_url=${BACKEND_URL}" >> $GITHUB_OUTPUT
           echo "Keycloak URL: ${KC_URL}"
+          echo "Backend URL: ${BACKEND_URL}"
 
-      - name: Inject Keycloak authority into environment.ts
+      - name: Inject URLs into environment.ts
         run: |
-          AUTHORITY="${{ steps.keycloak.outputs.url }}/realms/hr-manager"
+          AUTHORITY="${{ steps.urls.outputs.keycloak_url }}/realms/hr-manager"
+          BACKEND="${{ steps.urls.outputs.backend_url }}"
           sed -i "s|KEYCLOAK_AUTHORITY_PLACEHOLDER|${AUTHORITY}|g" \
+            ${{ env.ANGULAR_DIR }}/src/app/environments/environment.ts
+          sed -i "s|BACKEND_URL_PLACEHOLDER|${BACKEND}|g" \
             ${{ env.ANGULAR_DIR }}/src/app/environments/environment.ts
           echo "environment.ts after substitution:"
           cat ${{ env.ANGULAR_DIR }}/src/app/environments/environment.ts
