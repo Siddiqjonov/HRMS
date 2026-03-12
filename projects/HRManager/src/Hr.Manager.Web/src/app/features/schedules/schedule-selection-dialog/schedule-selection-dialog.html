@@ -1,0 +1,36 @@
+<h2 mat-dialog-title>Select Schedule</h2>
+<mat-dialog-content>
+    @if (loading) {
+    <div class="loading-container">
+        <mat-progress-spinner mode="indeterminate" diameter="40"></mat-progress-spinner>
+        <p>Loading schedules...</p>
+    </div>
+    } @else if (schedules.length === 0) {
+    <app-empty-state 
+      message="No schedules found" 
+      icon="event_busy"
+      description="Please create a work schedule first.">
+    </app-empty-state>
+    } @else {
+    <div class="schedules-list">
+        @for (schedule of schedules; track schedule.id) {
+        <div class="schedule-item" [class.selected]="selectedSchedule?.id === schedule.id"
+            (click)="selectSchedule(schedule)">
+            <div class="schedule-info">
+                <mat-icon>schedule</mat-icon>
+                <span class="schedule-name">{{ schedule.name }}</span>
+                <mat-icon class="visibility-icon" (click)="viewScheduleDetails(schedule, $event)">visibility</mat-icon>
+            </div>
+            @if (selectedSchedule?.id === schedule.id) {
+            <mat-icon class="check-icon">check_circle</mat-icon>
+            }
+        </div>
+        }
+    </div>
+    }
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-button (click)="onCancel()">Cancel</button>
+    <button mat-flat-button color="primary" [disabled]="!selectedSchedule" (click)="onConfirm()">Confirm
+        Selection</button>
+</mat-dialog-actions>

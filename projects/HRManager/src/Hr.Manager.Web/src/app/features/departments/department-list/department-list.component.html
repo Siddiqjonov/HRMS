@@ -1,0 +1,39 @@
+<app-loading-spinner [loading]="isLoading"></app-loading-spinner>
+
+@if(errorMessage) {
+<app-error-display [message]="errorMessage"></app-error-display>
+}
+
+<div class="actions-and-table-wrapper">
+  <div class="department-managment">
+    <h2>Department Management <mat-icon>business</mat-icon></h2>
+  </div>
+
+  <button class="add-btn" mat-flat-button color="primary" (click)="onAddDepartment()">
+    <mat-icon>business</mat-icon>
+    Add Department
+  </button>
+
+  @if (dataSource.data.length === 0 && !isLoading && !errorMessage) {
+    <app-empty-state 
+      message="No departments found" 
+      icon="business"
+      description="Start by adding your first department using the button above.">
+    </app-empty-state>
+  } @else {
+    <app-data-table
+      [dataSource]="dataSource"
+      [displayedColumns]="displayedColumns"
+      [length]="paginationResult?.totalCount || 0"
+      [pageSize]="paginationResult?.pageSize || 10"
+      [pageIndex]="(paginationResult?.page || 1) - 1"
+      [paginatorLabel]="'Departments'"
+      (pageChange)="onPageChange($event)"
+      (edit)="onEditDepartment($event)"
+      (delete)="onDeleteDepartment($event)"
+      (view)="onViewDepartment($event)"
+      (assignManager)="onAssignManager($event)"
+    >
+    </app-data-table>
+  }
+</div>

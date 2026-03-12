@@ -1,0 +1,80 @@
+<form [formGroup]="absenceForm" (ngSubmit)="onSubmit()" class="absence-form">
+    <h2>Create Absence Request <mat-icon>event_busy</mat-icon></h2>
+    
+    <div class="form-row">
+        <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Request Type</mat-label>
+            <mat-select formControlName="requestType">
+                <mat-option [value]="null">Select Type</mat-option>
+                @for (option of requestTypeOptions; track option.value) {
+                    <mat-option [value]="option.value">{{ option.label }}</mat-option>
+                }
+            </mat-select>
+            @if (requestTypeRequired) {
+                <mat-error><strong>Required</strong></mat-error>
+            }
+        </mat-form-field>
+    </div>
+
+    <div class="form-row">
+        <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Start Date</mat-label>
+            <input matInput [matDatepicker]="startPicker" formControlName="startDate">
+            <mat-datepicker-toggle matIconSuffix [for]="startPicker"></mat-datepicker-toggle>
+            <mat-datepicker #startPicker></mat-datepicker>
+            @if (startDateRequired) {
+                <mat-error><strong>Required</strong></mat-error>
+            }
+            @if (startDateInvalid) {
+                <mat-error>Start date cannot be in the past</mat-error>
+            }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="form-field">
+            <mat-label>End Date</mat-label>
+            <input matInput [matDatepicker]="endPicker" formControlName="endDate">
+            <mat-datepicker-toggle matIconSuffix [for]="endPicker"></mat-datepicker-toggle>
+            <mat-datepicker #endPicker></mat-datepicker>
+            @if (endDateRequired) {
+                <mat-error><strong>Required</strong></mat-error>
+            }
+            @if (endDateInvalid) {
+                <mat-error>End date cannot be in the past</mat-error>
+            }
+        </mat-form-field>
+    </div>
+
+    @if (dateRangeInvalid) {
+        <div class="form-error">
+            <span class="error-text">End date must be after or equal to start date</span>
+        </div>
+    }
+
+    <div class="form-row">
+        <mat-form-field appearance="outline" class="form-field full-width">
+            <mat-label>Reason</mat-label>
+            <textarea matInput formControlName="reason" placeholder="Enter reason for absence" rows="4"></textarea>
+            @if (reasonRequired) {
+                <mat-error><strong>Required</strong></mat-error>
+            }
+            @if (reasonMaxLength) {
+                <mat-error>Max 500 characters</mat-error>
+            }
+        </mat-form-field>
+    </div>
+
+    <div class="form-actions">
+        <button mat-button type="button" (click)="onCancel()">Cancel</button>
+        @if (isLoading) {
+            <button mat-flat-button color="primary" type="submit" [disabled]="true">
+                <mat-icon>hourglass_empty</mat-icon>
+                Creating...
+            </button>
+        } @else {
+            <button mat-flat-button color="primary" type="submit" [disabled]="absenceForm.invalid">
+                Create Request
+            </button>
+        }
+    </div>
+</form>
+

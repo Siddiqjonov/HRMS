@@ -1,0 +1,47 @@
+<h2 mat-dialog-title>
+  {{ data.approved ? 'Approve' : 'Reject' }} Absence Request
+  <mat-icon [style.color]="data.approved ? '#4caf50' : '#f44336'">
+    {{ data.approved ? 'check_circle' : 'cancel' }}
+  </mat-icon>
+</h2>
+
+<div mat-dialog-content>
+  <p><strong>Employee:</strong> {{ data.request.employeeName }}</p>
+  <p><strong>Type:</strong> {{ formatRequestType(data.request.type) }}</p>
+  <p><strong>Start Date:</strong> {{ formatDate(data.request.startDate) }}</p>
+  <p><strong>End Date:</strong> {{ formatDate(data.request.endDate) }}</p>
+  <p><strong>Days:</strong> {{ data.request.daysRequested }}</p>
+
+  <form [formGroup]="processForm" class="process-form">
+    <mat-form-field appearance="outline" class="form-field full-width">
+      <mat-label>Reason (Optional)</mat-label>
+      <textarea matInput formControlName="reason" placeholder="Enter reason for {{ data.approved ? 'approval' : 'rejection' }}" rows="4"></textarea>
+      @if (reasonMaxLength) {
+        <mat-error>Max 500 characters</mat-error>
+      }
+    </mat-form-field>
+  </form>
+</div>
+
+<div mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()" [disabled]="isLoading">Cancel</button>
+  @if (isLoading) {
+    <button 
+      mat-flat-button 
+      [color]="data.approved ? 'primary' : 'warn'"
+      [disabled]="true">
+      <mat-icon>hourglass_empty</mat-icon>
+      Processing...
+    </button>
+  } @else {
+    <button 
+      mat-flat-button 
+      [color]="data.approved ? 'primary' : 'warn'"
+      (click)="onSubmit()" 
+      [disabled]="processForm.invalid">
+      {{ data.approved ? 'Approve' : 'Reject' }}
+    </button>
+  }
+</div>
+
+

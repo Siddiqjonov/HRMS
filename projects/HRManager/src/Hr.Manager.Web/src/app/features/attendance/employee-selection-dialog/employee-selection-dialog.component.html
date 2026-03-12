@@ -1,0 +1,42 @@
+<h2 mat-dialog-title>Select Employee</h2>
+
+<mat-dialog-content>
+  @if (loading) {
+    <div class="loading-container">
+      <mat-progress-spinner mode="indeterminate" diameter="40"></mat-progress-spinner>
+      <p>Loading employees...</p>
+    </div>
+  } @else if (employees.length === 0) {
+    <app-empty-state 
+      message="No employees found" 
+      icon="person_off"
+      description="Please create an employee first.">
+    </app-empty-state>
+  } @else {
+    <div class="employees-list">
+      @for (employee of employees; track employee.id) {
+        <div 
+          class="employee-item"
+          [class.selected]="selectedEmployee?.id === employee.id"
+          (click)="selectEmployee(employee)">
+          <div class="employee-info">
+            <mat-icon>person</mat-icon>
+            <span class="employee-name">{{ employee.fullName }}</span>
+            <mat-icon 
+              class="visibility-icon" 
+              (click)="viewEmployeeDetails(employee, $event)">
+              visibility
+            </mat-icon>
+          </div>
+          @if (selectedEmployee?.id === employee.id) {
+            <mat-icon class="check-icon">check_circle</mat-icon>
+          }
+        </div>
+      }
+    </div>
+  }
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">Cancel</button>
+  <button mat-flat-button color="primary" [disabled]="!selectedEmployee" (click)="onConfirm()">Confirm Selection</button>
+</mat-dialog-actions>

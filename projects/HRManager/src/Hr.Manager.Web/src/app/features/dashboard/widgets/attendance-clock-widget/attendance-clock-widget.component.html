@@ -1,0 +1,83 @@
+@if (isLoading) {
+  <app-widget-skeleton type="clock"></app-widget-skeleton>
+} @else {
+  <mat-card class="attendance-clock-card">
+    <mat-card-header>
+      <mat-card-title>Attendance Clock</mat-card-title>
+    </mat-card-header>
+    
+    <mat-card-content>
+      <div class="time-display">
+        <div class="current-time">{{ currentTime | date:'HH:mm:ss' }}</div>
+        <div class="current-date">{{ currentTime | date:'EEEE, MMM d' }}</div>
+      </div>
+
+      @if (canCheckIn) {
+      <div class="action-section">
+        <button 
+          mat-raised-button 
+          color="primary" 
+          class="clock-button check-in-button"
+          (click)="onClockIn()"
+          [disabled]="isCheckingIn">
+          <mat-icon>login</mat-icon>
+          <span>Check In</span>
+        </button>
+        <p class="status-text">You haven't checked in today</p>
+      </div>
+    } @else if (canCheckOut) {
+      <div class="action-section">
+        <div class="check-in-info">
+          <div class="info-row">
+            <span class="label">Checked In:</span>
+            <span class="value">{{ formatTime(todayRecord?.checkIn) }}</span>
+          </div>
+          @if (todayRecord?.isLate) {
+            <div class="late-badge">
+              <mat-icon>warning</mat-icon>
+              <span>Late Arrival</span>
+            </div>
+          }
+        </div>
+        <button 
+          mat-raised-button 
+          color="accent" 
+          class="clock-button check-out-button"
+          (click)="onClockOut()"
+          [disabled]="isCheckingOut">
+          <mat-icon>logout</mat-icon>
+          <span>Check Out</span>
+        </button>
+      </div>
+    } @else if (isCompleted) {
+      <div class="completed-section">
+        <div class="completed-info">
+          <div class="info-row">
+            <span class="label">Checked In:</span>
+            <span class="value">{{ formatTime(todayRecord?.checkIn) }}</span>
+          </div>
+          <div class="info-row">
+            <span class="label">Checked Out:</span>
+            <span class="value">{{ formatTime(todayRecord?.checkOut) }}</span>
+          </div>
+          <div class="info-row">
+            <span class="label">Total Time:</span>
+            <span class="value">{{ formatMinutes(todayRecord?.totalMinutes) }}</span>
+          </div>
+          @if (todayRecord && todayRecord.overtimeMinutes && todayRecord.overtimeMinutes > 0) {
+            <div class="info-row overtime">
+              <span class="label">Overtime:</span>
+              <span class="value">{{ formatMinutes(todayRecord.overtimeMinutes) }}</span>
+            </div>
+          }
+        </div>
+        <div class="completed-badge">
+          <mat-icon>check_circle</mat-icon>
+          <span>Completed</span>
+        </div>
+      </div>
+      }
+    </mat-card-content>
+  </mat-card>
+}
+

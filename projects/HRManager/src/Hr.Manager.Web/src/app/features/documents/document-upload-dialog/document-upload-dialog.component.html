@@ -1,0 +1,110 @@
+<h2 mat-dialog-title>Upload Document</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="uploadForm">
+    <!-- Employee Selection -->
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>Select Employee</mat-label>
+      <input 
+        matInput 
+        [readonly]="true"
+        [value]="selectedEmployee ? selectedEmployee.fullName : ''"
+        placeholder="Select Employee"
+        (click)="onEmployeeInputClick($event)"
+        (keydown)="onEmployeeInputKeydown($event)"
+        class="selection-input"
+        required>
+      @if (selectedEmployee) {
+        <button mat-icon-button matSuffix (click)="clearEmployee($event)" type="button" class="clear-btn">
+          <mat-icon>close</mat-icon>
+        </button>
+      } @else {
+        <mat-icon matSuffix class="selection-icon" (click)="onEmployeeInputClick($event)">person_search</mat-icon>
+      }
+    </mat-form-field>
+
+    <!-- Document Type Selection -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Document Type</mat-label>
+      <mat-select formControlName="documentType" [disabled]="isUploading">
+        <mat-option *ngFor="let type of documentTypes" [value]="type.value">
+          {{ type.label }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <!-- File Upload Area -->
+    <div 
+      class="upload-area"
+      [class.dragging]="isDragging"
+      [class.has-file]="selectedFile"
+      (dragover)="onDragOver($event)"
+      (dragleave)="onDragLeave($event)"
+      (drop)="onDrop($event)"
+      *ngIf="!selectedFile"
+    >
+      <mat-icon class="upload-icon">cloud_upload</mat-icon>
+      <p class="upload-text">Drag and drop file here</p>
+      <p class="upload-subtext">or</p>
+      <button 
+        mat-raised-button 
+        color="primary" 
+        type="button"
+        (click)="fileInput.click()"
+        [disabled]="isUploading"
+      >
+        <mat-icon>folder_open</mat-icon>
+        Browse Files
+      </button>
+      <input 
+        #fileInput 
+        type="file" 
+        hidden 
+        (change)="onFileSelected($event)"
+        accept=".pdf,.jpg,.jpeg,.png,.doc,.docx"
+      >
+      <p class="file-info">Supported formats: PDF, JPG, PNG, DOC, DOCX (Max 10MB)</p>
+    </div>
+
+    <!-- Selected File Display -->
+    <div class="selected-file" *ngIf="selectedFile">
+      <div class="file-icon-wrapper">
+        <mat-icon class="file-icon">{{ getFileIcon(selectedFile) }}</mat-icon>
+      </div>
+      <div class="file-details">
+        <p class="file-name">{{ selectedFile.name }}</p>
+        <p class="file-size">{{ formatFileSize(selectedFile.size) }}</p>
+      </div>
+      <button 
+        mat-icon-button 
+        type="button" 
+        (click)="removeFile()"
+        [disabled]="isUploading"
+        class="remove-button"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+
+    <!-- Upload Progress -->
+    <div class="progress-container" *ngIf="isUploading">
+      <mat-progress-bar mode="determinate" [value]="uploadProgress"></mat-progress-bar>
+      <p class="progress-text">Uploading... {{ uploadProgress }}%</p>
+    </div>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()" [disabled]="isUploading">
+    Cancel
+  </button>
+  <button 
+    mat-raised-button 
+    color="primary" 
+    (click)="onSubmit()"
+    [disabled]="!selectedFile || !selectedEmployee || uploadForm.invalid || isUploading"
+  >
+    <mat-icon>upload</mat-icon>
+    Upload
+  </button>
+</mat-dialog-actions>

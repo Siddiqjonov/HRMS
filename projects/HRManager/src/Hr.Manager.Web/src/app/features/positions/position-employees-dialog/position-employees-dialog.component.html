@@ -1,0 +1,32 @@
+<h2 mat-dialog-title>Employees - {{ data.positionTitle }}</h2>
+<mat-dialog-content>
+  @if (data.employees && data.employees.length > 0) {
+    <div class="employees-list">
+      @for (employee of data.employees; track employee.id) {
+        <div class="employee-item">
+          <div class="employee-info">
+            <mat-icon>person</mat-icon>
+            <span class="employee-name">{{ employee.fullName }}</span>
+            <mat-icon 
+              class="visibility-icon" 
+              (click)="viewEmployeeDetails(employee, $event)">
+              visibility
+            </mat-icon>
+          </div>
+        </div>
+      }
+    </div>
+  } @else {
+    <div class="no-employees">
+      <mat-icon>person_off</mat-icon>
+      <p>No employees assigned to this position yet.</p>
+    </div>
+  }
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="close()">
+    Close
+  </button>
+</mat-dialog-actions>
+

@@ -1,0 +1,56 @@
+@if (isLoading) {
+  <app-widget-skeleton 
+    type="stats" 
+    title="Employee Statistics">
+  </app-widget-skeleton>
+} @else {
+  <mat-card class="employee-statistics-card">
+    <mat-card-header>
+      <mat-card-title>Employee Statistics</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+    <div class="statistics-grid">
+      <div class="stat-box primary">
+        <mat-icon>groups</mat-icon>
+        <div class="stat-details">
+          <span class="stat-number">{{ statistics.totalEmployees }}</span>
+          <span class="stat-title">Total Employees</span>
+        </div>
+      </div>
+
+      <div class="stat-box success">
+        <mat-icon>verified</mat-icon>
+        <div class="stat-details">
+          <span class="stat-number">{{ statistics.activeEmployees }}</span>
+          <span class="stat-title">Active</span>
+        </div>
+      </div>
+
+      <div class="stat-box info">
+        <mat-icon>person_add</mat-icon>
+        <div class="stat-details">
+          <span class="stat-number">{{ statistics.newHiresThisMonth }}</span>
+          <span class="stat-title">New Hires (This Month)</span>
+        </div>
+      </div>
+
+      <div class="stat-box warning">
+        <mat-icon>work_history</mat-icon>
+        <div class="stat-details">
+          <span class="stat-number">{{ statistics.averageTenure }} yrs</span>
+          <span class="stat-title">Avg. Tenure</span>
+        </div>
+      </div>
+
+      <div class="stat-box accent">
+        <mat-icon>trending_down</mat-icon>
+        <div class="stat-details">
+          <span class="stat-number">{{ statistics.turnoverRate }}%</span>
+          <span class="stat-title">Turnover Rate</span>
+        </div>
+      </div>
+    </div>
+    </mat-card-content>
+  </mat-card>
+}
+

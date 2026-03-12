@@ -1,0 +1,30 @@
+.actions-and-table-wrapper {
+  padding-left: 100px;
+  padding-right: 100px;
+  margin-top: 0.5cm;
+  padding-top: 0;
+}
+
+.add-btn {
+  float: right;
+  padding: 0.5rem 1rem;
+  padding-left: 20px;
+  margin-bottom: 2rem;
+}
+
+.employee-managment {
+  display: inline-block;
+  margin-bottom: 2rem;
+}
+
+.employee-managment-icon {
+  padding-bottom: -20px;
+}
+
+.employee-managment h2 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  margin: 0;
+}

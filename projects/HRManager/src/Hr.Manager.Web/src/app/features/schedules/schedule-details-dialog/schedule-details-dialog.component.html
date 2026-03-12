@@ -1,0 +1,20 @@
+<h2 mat-dialog-title>
+    <mat-icon>schedule</mat-icon>
+    {{ data.name }}
+</h2>
+
+<mat-dialog-content>
+    <p><strong>Name:</strong> {{ data.name }}</p>
+    <p><strong>Description:</strong> {{ data.description }}</p>
+
+    <p><strong>Start Time:</strong> {{ data.startTime }}</p>
+    <p><strong>End Time:</strong> {{ data.endTime }}</p>
+
+    <p><strong>Days of Week:</strong> {{ formatDaysOfWeek(data.daysOfWeek) }}</p>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+    <button matButton="outlined" (click)="close()">
+        Close
+    </button>
+</mat-dialog-actions>

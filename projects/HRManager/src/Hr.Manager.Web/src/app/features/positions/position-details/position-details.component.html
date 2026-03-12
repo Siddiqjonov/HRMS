@@ -1,0 +1,58 @@
+<app-loading-spinner [loading]="isLoading"></app-loading-spinner>
+
+@if(errorMessage) {
+<app-error-display [message]="errorMessage"></app-error-display>
+}
+
+@if(position && !isLoading) {
+<div class="position-details-wrapper">
+  <div class="position-header">
+    <button mat-icon-button (click)="onBack()" class="back-button">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <h2>Position Details</h2>
+    <button mat-flat-button color="primary" (click)="onEdit()">
+      <mat-icon>edit</mat-icon>
+      Edit Position
+    </button>
+  </div>
+
+  <div class="position-info">
+    <div class="info-card">
+      <h3>Position Information</h3>
+      <div class="info-row">
+        <span class="label">Title:</span>
+        <span class="value">{{ position.title }}</span>
+      </div>
+      <div class="info-row">
+        <span class="label">Department:</span>
+        <span class="value">{{ position.departmentName }}</span>
+      </div>
+      <div class="info-row">
+        <span class="label">Salary Range:</span>
+        <span class="value">{{ position.salaryMin | number }} - {{ position.salaryMax | number }}</span>
+      </div>
+    </div>
+
+    <div class="employees-card">
+      <h3>Employees in this Position</h3>
+      @if (employees.length === 0) {
+      <p class="no-employees">No employees assigned to this position</p>
+      } @else {
+      <div class="employees-list">
+        @for (employee of employees; track employee.id) {
+        <div class="employee-item">
+          <mat-icon>person</mat-icon>
+          <div class="employee-info">
+            <span class="employee-name">{{ employee.fullName }}</span>
+            <span class="employee-email">{{ employee.email }}</span>
+          </div>
+        </div>
+        }
+      </div>
+      }
+    </div>
+  </div>
+</div>
+}
+

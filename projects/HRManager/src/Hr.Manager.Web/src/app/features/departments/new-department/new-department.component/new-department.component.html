@@ -1,0 +1,68 @@
+<form [formGroup]="departmentForm" (ngSubmit)="onSubmit()" class="create-department-form">
+  <h2>{{ isEditMode ? 'Edit Department' : 'Create Department' }}</h2>
+
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Department Name</mat-label>
+    <input matInput formControlName="name" placeholder="Enter department name" />
+    @if (nameIsRequired) {
+    <mat-error> Name is <strong>required</strong> </mat-error>
+    } @if (nameHasLengthError) {
+    <mat-error> Name must be between 3 and 100 character </mat-error>
+    }
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Description</mat-label>
+    <textarea
+      matInput
+      formControlName="description"
+      placeholder="Enter department description"
+      rows="3"
+    ></textarea>
+    @if (descriptionIsRequired) {
+    <mat-error> Description is <strong>required</strong> </mat-error>
+    }@if (descriptionHasLengthError) {
+    <mat-error>Description must not exceed 250 characters</mat-error>
+    }
+  </mat-form-field>
+
+  <div class="manager-section">
+    @if (selectedManager) {
+    <div class="manager-assigned">
+      <div class="manager-info">
+        <mat-icon>check_circle</mat-icon>
+        <div class="manager-details">
+          <span class="manager-name">{{ selectedManager.fullName }}</span>
+        </div>
+      </div>
+      <div class="manager-actions">
+        <button type="button" mat-stroked-button color="primary" (click)="assignManager()">
+          <mat-icon>edit</mat-icon>
+          Change Manager
+        </button>
+        <button type="button" mat-stroked-button color="warn" (click)="removeManager()">
+          <mat-icon>person_remove</mat-icon>
+          Remove Manager
+        </button>
+      </div>
+    </div>
+    } @else {
+    <button
+      type="button"
+      mat-stroked-button
+      color="primary"
+      (click)="assignManager()"
+      class="full-width"
+    >
+      <mat-icon>person_add</mat-icon>
+      Assign Manager (Optional)
+    </button>
+    }
+  </div>
+
+  <div class="form-actions">
+    <button type="submit" mat-flat-button color="primary" [disabled]="departmentForm.invalid">
+      {{ isEditMode ? 'Update Department' : 'Create Department' }}
+    </button>
+  </div>
+</form>

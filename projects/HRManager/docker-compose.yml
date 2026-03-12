@@ -1,0 +1,52 @@
+services:
+  hrmanager.api:
+    image: ${DOCKER_REGISTRY-}hrmanagerapi
+    container_name: hr.api
+    build:
+      context: ../..
+      dockerfile: projects/HRManager/src/HrManager.Api/Dockerfile
+    networks:
+      - hr-network
+    depends_on:
+      hr.identity:
+        condition: service_started
+    restart: always
+    ports:
+      - "5000:5000"
+      - "5001:5001"
+
+  hr.identity:
+    image: quay.io/keycloak/keycloak:latest
+    container_name: hr.identity
+    command: start-dev
+    environment:
+      - KC_HEALTH_ENABLED=true
+      - KC_BOOTSTRAP_ADMIN_USERNAME=admin
+      - KC_BOOTSTRAP_ADMIN_PASSWORD=admin
+    volumes:
+      - hrmanager-identity-data:/opt/keycloak/data
+      - ./themes/hr-manager:/opt/keycloak/themes/hr-manager
+    networks: 
+      - hr-network
+    ports:
+      - 18080:8080
+        
+  hrmanager.web:
+    build:
+      context: ./src/Hr.Manager.Web/
+      dockerfile: Dockerfile
+    container_name: hr.web
+    networks:
+      - hr-network
+    depends_on:
+      hr.identity:
+        condition: service_started
+    ports:
+      - "80:80"
+
+volumes:
+  hrmanager-identity-data:
+
+networks:
+  hr-network:
+    driver: bridge

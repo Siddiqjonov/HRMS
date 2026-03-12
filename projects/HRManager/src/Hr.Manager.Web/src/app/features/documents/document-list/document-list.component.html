@@ -1,0 +1,79 @@
+<app-loading-spinner [loading]="isLoading"></app-loading-spinner>
+
+@if(errorMessage) {
+<app-error-display [message]="errorMessage"></app-error-display>
+}
+
+<div class="actions-and-table-wrapper">
+  <div class="header-section">
+    <div class="document-management">
+      <h2>Document Management <mat-icon>folder</mat-icon></h2>
+    </div>
+    <div class="buttons-container">
+      <button mat-raised-button (click)="openFilterDialog()" type="button" class="filter-btn">
+        <mat-icon>filter_list</mat-icon>
+        Filters
+      </button>
+      <button mat-flat-button color="primary" (click)="onUploadDocument()" class="add-btn">
+        <mat-icon>upload</mat-icon>
+        Upload Document
+      </button>
+    </div>
+  </div>
+
+  <!-- Active Filters Display -->
+  @if (selectedEmployee || selectedDocumentType !== null) {
+  <div class="active-filters">
+    <div class="filters-container">
+      <span class="filters-label">Active Filters:</span>
+      <div class="filter-chips">
+        @if (selectedEmployee) {
+        <div class="filter-chip">
+          <span>Employee: {{ selectedEmployee.fullName }}</span>
+          <button mat-icon-button (click)="clearEmployee()" class="chip-close">
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+        }
+        @if (selectedDocumentType !== null) {
+        <div class="filter-chip">
+          <span>Type: {{ getDocumentTypeLabel(selectedDocumentType) }}</span>
+          <button mat-icon-button (click)="clearDocumentType()" class="chip-close">
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+        }
+      </div>
+      <button mat-stroked-button (click)="onClearFilters()" class="clear-all-btn">
+        <mat-icon>clear_all</mat-icon>
+        Clear All
+      </button>
+    </div>
+  </div>
+  }
+
+  @if (dataSource.data.length === 0 && !isLoading && !errorMessage) {
+  <app-empty-state 
+    [message]="hasActiveFilters ? 'No documents found' : 'No documents found'" 
+    icon="folder_open"
+    [description]="hasActiveFilters ? 'No documents match the current filters. Try adjusting your filters or clear them to see all documents.' : 'Upload your first document to get started using the button above.'">
+  </app-empty-state>
+  } @else {
+  <app-data-table 
+    [dataSource]="dataSource" 
+    [displayedColumns]="displayedColumns"
+    [length]="paginationResult?.totalCount || 0" 
+    [pageSize]="paginationResult?.pageSize || 10"
+    [pageIndex]="(paginationResult?.page || 1) - 1" 
+    [paginatorLabel]="'Documents'"
+    [showViewButton]="false"
+    [showEditButton]="true"
+    [showDeleteButton]="true"
+    [customEditIcon]="'download'"
+    [customEditTooltip]="'Download'"
+    (pageChange)="onPageChange($event)" 
+    (edit)="onDownloadDocument($event)"
+    (delete)="onDeleteDocument($event)">
+  </app-data-table>
+  }
+</div>

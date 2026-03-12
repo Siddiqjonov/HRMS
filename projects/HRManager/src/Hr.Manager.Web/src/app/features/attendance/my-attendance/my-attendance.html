@@ -1,0 +1,92 @@
+<app-loading-spinner [loading]="isLoading"></app-loading-spinner>
+
+@if(errorMessage) {
+<app-error-display [message]="errorMessage"></app-error-display>
+}
+
+<div class="actions-and-table-wrapper">
+  <div class="main-content">
+    <!-- Attendance Records -->
+    <div class="right-panel">
+      <div class="attendance-header">
+        <h2 class="attendance-title">
+          My Attendance
+          <mat-icon>schedule</mat-icon>
+        </h2>
+        <button mat-raised-button color="primary" (click)="openFilterDialog()" class="filter-button">
+          <mat-icon>filter_list</mat-icon>
+          Filters
+        </button>
+      </div>
+
+  <!-- Active Filters Display -->
+  @if (startDate || endDate || arrivalStatus !== 'all' || departureStatus !== 'all') {
+  <div class="active-filters">
+    <div class="filters-container">
+      <span class="filters-label">Active Filters:</span>
+      <div class="filter-chips">
+        @if (startDate) {
+        <div class="filter-chip">
+          <span>Start: {{ startDate | date: 'shortDate' }}</span>
+          <button mat-icon-button (click)="startDate = null; onFilterChange()" class="chip-close">
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+        }
+        @if (endDate) {
+        <div class="filter-chip">
+          <span>End: {{ endDate | date: 'shortDate' }}</span>
+          <button mat-icon-button (click)="endDate = null; onFilterChange()" class="chip-close">
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+        }
+        @if (arrivalStatus !== 'all') {
+        <div class="filter-chip">
+          <span>Arrival: {{ arrivalStatus === 'onTime' ? 'On Time' : arrivalStatus === 'late' ? 'Late' : arrivalStatus }}</span>
+          <button mat-icon-button (click)="arrivalStatus = 'all'; onFilterChange()" class="chip-close">
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+        }
+        @if (departureStatus !== 'all') {
+        <div class="filter-chip">
+          <span>Departure: {{ departureStatus === 'onTime' ? 'On Time' : departureStatus === 'early' ? 'Early' : departureStatus }}</span>
+          <button mat-icon-button (click)="departureStatus = 'all'; onFilterChange()" class="chip-close">
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+        }
+      </div>
+      <button mat-stroked-button (click)="onClearFilters()" class="clear-all-btn">
+        <mat-icon>clear_all</mat-icon>
+        Clear All
+      </button>
+    </div>
+  </div>
+  }
+
+  @if (dataSource.data.length === 0 && !isLoading && !errorMessage) {
+    <app-empty-state 
+      message="No attendance records found" 
+      icon="event_busy"
+      description="You don't have any attendance records yet.">
+    </app-empty-state>
+  } @else {
+    <app-data-table
+      [dataSource]="dataSource"
+      [displayedColumns]="displayedColumns"
+      [length]="paginationResult?.totalCount || 0"
+      [pageSize]="paginationResult?.pageSize || 10"
+      [pageIndex]="(paginationResult?.page || 1) - 1"
+      [paginatorLabel]="'Attendance Records'"
+      [showViewButton]="false"
+      [showEditButton]="false"
+      [showDeleteButton]="false"
+      (pageChange)="onPageChange($event)"
+    >
+    </app-data-table>
+  }
+    </div>
+  </div>
+</div>

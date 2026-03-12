@@ -1,0 +1,59 @@
+<form [formGroup]="positionForm" (ngSubmit)="onSubmit()" class="create-position-form">
+  <h2>{{ isEditMode ? 'Edit Position' : 'Create Position' }} <mat-icon>{{ isEditMode ? 'edit' : 'work' }}</mat-icon></h2>
+
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Position Title</mat-label>
+    <input matInput formControlName="title" placeholder="Enter position title" />
+    @if (titleIsRequired) {
+    <mat-error><strong>Required</strong></mat-error>
+    } @else if (titleHasMinLengthError) {
+    <mat-error>Min 3 characters</mat-error>
+    } @else if (titleHasMaxLengthError) {
+    <mat-error>Max 100 characters</mat-error>
+    }
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Department</mat-label>
+    <input matInput [value]="selectedDepartment?.name || ''" placeholder="Select Department" readonly 
+           (click)="assignDepartment()" class="selection-input" />
+    <mat-icon matSuffix class="selection-icon" (click)="assignDepartment()">apartment</mat-icon>
+    @if (departmentIsRequired) {
+    <mat-error><strong>Required</strong></mat-error>
+    }
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Minimum Salary</mat-label>
+    <input matInput type="number" formControlName="salaryMin" placeholder="Enter minimum salary" />
+    @if (salaryMinIsRequired) {
+    <mat-error><strong>Required</strong></mat-error>
+    } @else if (salaryMinRangeError) {
+    <mat-error>Must be ≤ maximum salary</mat-error>
+    } @else if (salaryMinHasError) {
+    <mat-error>Must be greater than 0</mat-error>
+    }
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Maximum Salary</mat-label>
+    <input matInput type="number" formControlName="salaryMax" placeholder="Enter maximum salary" />
+    @if (salaryMaxIsRequired) {
+    <mat-error><strong>Required</strong></mat-error>
+    } @else if (salaryRangeError) {
+    <mat-error>Must be ≥ minimum salary</mat-error>
+    } @else if (salaryMaxHasError) {
+    <mat-error>Must be greater than 0</mat-error>
+    }
+  </mat-form-field>
+
+  <div class="form-actions">
+    <button type="button" mat-stroked-button (click)="onCancel()">
+      Cancel
+    </button>
+    <button type="submit" mat-flat-button color="primary" [disabled]="positionForm.invalid || salaryRangeError || salaryMinRangeError">
+      {{ isEditMode ? 'Update Position' : 'Create Position' }}
+    </button>
+  </div>
+</form>
+

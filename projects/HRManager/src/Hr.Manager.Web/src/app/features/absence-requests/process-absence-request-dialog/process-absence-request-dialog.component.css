@@ -1,0 +1,44 @@
+h2 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+}
+
+h2 mat-icon {
+  font-size: 24px;
+  width: 24px;
+  height: 24px;
+}
+
+[mat-dialog-content] {
+  min-width: 400px;
+  padding: 20px 24px;
+}
+
+[mat-dialog-content] p {
+  margin: 8px 0;
+}
+
+.process-form {
+  margin-top: 16px;
+}
+
+.form-field {
+  width: 100%;
+}
+
+.form-field.full-width {
+  width: 100%;
+}
+
+[mat-dialog-actions] {
+  padding: 16px 24px;
+  margin: 0;
+}
+
+[mat-dialog-actions] button {
+  margin-left: 8px;
+}
+
+

@@ -1,0 +1,35 @@
+@if (isLoading) {
+  <app-widget-skeleton type="list"></app-widget-skeleton>
+} @else {
+  <mat-card class="recent-requests-card">
+    <mat-card-header>
+      <mat-card-title>Recent Requests</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      @if (requests.length > 0) {
+      <div class="requests-list">
+        @for (request of requests; track request.id) {
+          <div class="request-item">
+            <div class="request-icon">
+              <mat-icon>{{ getRequestIcon(request.type) }}</mat-icon>
+            </div>
+            <div class="request-info">
+              <div class="request-type">{{ getTypeText(request.type) }}</div>
+              <div class="request-date">{{ formatDate(request.startDate) }}</div>
+            </div>
+            <span class="request-status" [class]="getStatusColor(request.status)">
+              {{ getStatusText(request.status) }}
+            </span>
+          </div>
+        }
+      </div>
+    } @else {
+      <div class="empty-state">
+        <mat-icon>inbox</mat-icon>
+        <p>No recent requests</p>
+      </div>
+      }
+    </mat-card-content>
+  </mat-card>
+}
+

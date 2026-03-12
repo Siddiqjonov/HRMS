@@ -1,0 +1,67 @@
+:host {
+  display: block;
+  max-width: 520px;
+  padding: 0;
+}
+
+h2[mat-dialog-title] {
+  display: flex;
+  align-items: center;
+  font-size: 20px;
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 8px;
+}
+
+h2 mat-icon {
+  font-size: 22px;
+  margin-right: 8px;
+  color: #1976d2;
+}
+
+mat-dialog-content {
+  font-size: 14px;
+  line-height: 1.4;
+  color: #374151;
+  max-height: 65vh;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+mat-dialog-content p {
+  margin: 3px 0;
+  padding: 2px 0;
+  line-height: 1.2;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+mat-dialog-content strong {
+  color: #111827;
+  font-weight: 600;
+  display: inline-block;
+  min-width: 160px;
+}
+
+mat-dialog-actions {
+  margin-top: 12px;
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 10px;
+  border-top: 1px solid #e5e7eb;
+}
+
+
+@media (max-width: 800px) {
+  mat-dialog-content {
+    padding: 16px;
+    font-size: 13px;
+  }
+
+  mat-dialog-content strong {
+    min-width: 120px;
+  }
+
+  h2[mat-dialog-title] {
+    font-size: 1.1rem;
+  }
+}

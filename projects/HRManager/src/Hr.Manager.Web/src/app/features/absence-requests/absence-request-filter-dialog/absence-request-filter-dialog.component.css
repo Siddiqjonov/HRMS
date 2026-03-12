@@ -1,0 +1,167 @@
+:host ::ng-deep mat-dialog-content {
+  overflow: hidden !important;
+  max-height: none !important;
+  overflow-x: hidden !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-height: 300px;
+}
+
+:host ::ng-deep .mat-mdc-dialog-container {
+  max-width: 400px !important;
+}
+
+:host {
+  overflow-x: hidden;
+  max-width: 100%;
+  display: block;
+}
+
+.filter-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  max-height: calc(80vh - 240px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  margin: 0 -24px;
+  padding: 0 24px;
+  padding-top: 1.5rem;
+  scrollbar-width: none; /* Firefox scrollbar hiding */
+  box-sizing: border-box;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Hide scrollbars completely */
+.filter-container::-webkit-scrollbar {
+  width: 0px;
+  background: transparent;
+}
+
+.filter-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.filter-container::-webkit-scrollbar-thumb {
+  background: transparent;
+}
+
+.filter-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  align-items: center;
+}
+
+.filter-label {
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: rgba(0, 0, 0, 0.87);
+  display: block;
+  margin-bottom: 0;
+}
+
+.filter-container mat-form-field {
+  width: 100%;
+  max-width: 352px;
+}
+
+.employee-input {
+  cursor: pointer;
+}
+
+.employee-icon {
+  cursor: pointer;
+  color: rgba(0, 0, 0, 0.54);
+}
+
+.employee-icon:hover {
+  color: rgba(0, 0, 0, 0.87);
+}
+
+.clear-employee-btn {
+  width: 24px;
+  height: 24px;
+  line-height: 24px;
+}
+
+
+.dialog-actions {
+  padding: 1rem 0;
+  gap: 0.5rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.12);
+  margin-top: 1rem;
+  margin-left: -24px;
+  margin-right: -24px;
+  padding-left: 24px;
+  padding-right: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.dialog-actions button {
+  min-width: auto;
+  padding: 0 16px;
+  height: 36px;
+  line-height: 36px;
+  font-size: 0.875rem;
+}
+
+.dialog-actions button mat-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+  margin-right: 6px;
+  vertical-align: middle;
+}
+
+.dialog-actions button[mat-raised-button] {
+  padding: 0 20px;
+}
+
+.title-icon {
+  margin-right: 0.5rem;
+  vertical-align: middle;
+  flex-shrink: 0;
+}
+
+h2[mat-dialog-title] {
+  margin: 0;
+  padding: 0;
+  padding-bottom: 0.5rem;
+  font-size: 1.25rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  width: 100%;
+}
+
+@media (max-width: 600px) {
+  .filter-container {
+    max-height: calc(80vh - 200px);
+  }
+
+  .filter-container mat-form-field {
+    max-width: 100%;
+  }
+
+
+  .dialog-actions {
+    flex-wrap: wrap;
+  }
+
+  .dialog-actions button {
+    flex: 1;
+    min-width: 0;
+  }
+}
+

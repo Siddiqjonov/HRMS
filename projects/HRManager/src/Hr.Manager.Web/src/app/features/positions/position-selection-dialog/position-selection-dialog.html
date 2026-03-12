@@ -1,0 +1,37 @@
+<h2 mat-dialog-title>Select Position</h2>
+<mat-dialog-content>
+    @if (loading) {
+    <div class="loading-container">
+        <mat-progress-spinner mode="indeterminate" diameter="40"></mat-progress-spinner>
+        <p>Loading positions...</p>
+    </div>
+    } @else if (positions.length === 0) {
+    <app-empty-state 
+      message="No positions found" 
+      icon="work_off"
+      description="Please create a position first.">
+    </app-empty-state>
+    } @else {
+    <div class="positions-list">
+        @for (position of positions; track position.id) {
+        <div class="position-item" [class.selected]="selectedPosition?.id === position.id"
+            (click)="selectPosition(position)">
+            <div class="position-info">
+                <mat-icon>work</mat-icon>
+                <span class="position-name">{{ position.title }}</span>
+                <mat-icon class="visibility-icon" (click)="viewPositionDetails(position, $event)">visibility</mat-icon>
+            </div>
+            @if (selectedPosition?.id === position.id) {
+            <mat-icon class="check-icon">check_circle</mat-icon>
+            }
+        </div>
+        }
+    </div>
+    }
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-button (click)="onCancel()">Cancel</button>
+    <button mat-flat-button color="primary" [disabled]="!selectedPosition" (click)="onConfirm()">
+        Confirm Selection
+    </button>
+</mat-dialog-actions>

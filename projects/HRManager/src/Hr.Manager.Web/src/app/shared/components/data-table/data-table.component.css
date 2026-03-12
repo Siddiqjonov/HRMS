@@ -1,0 +1,664 @@
+.table-wrapper {
+  max-height: calc(100vh - 250px);
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+}
+
+.table-container {
+  overflow-x: auto;
+  overflow-y: auto;
+  max-height: calc(100vh - 250px);
+  border-radius: 16px;
+  box-shadow: none;
+  background: #fafbfc;
+  padding: 0;
+  clear: both;
+  margin-bottom: 1.5rem;
+  margin-top: 0;
+  padding-top: 0;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid #e5e7eb;
+  position: relative;
+  width: 100%;
+  /* Smooth scrolling */
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  /* Always visible thin scrollbar */
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: rgba(0, 0, 0, 0.2) transparent; /* Firefox */
+  -ms-overflow-style: -ms-autohiding-scrollbar; /* IE and Edge */
+}
+
+/* Custom thin scrollbar for WebKit browsers - always visible */
+.table-container::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+  display: block;
+}
+
+.table-container::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 10px;
+}
+
+.table-container::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  transition: background 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.table-container::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.35);
+}
+
+/* Remove scrollbar arrows/buttons */
+.table-container::-webkit-scrollbar-button {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+.table-container::-webkit-scrollbar-corner {
+  display: none;
+}
+
+
+.table-container table {
+  border-radius: 0;
+  overflow: visible;
+  background-color: transparent;
+  position: relative;
+  z-index: 1;
+}
+
+.table-container:hover {
+  box-shadow: none;
+  border-color: #d1d5db;
+  background: #fafbfc;
+}
+
+.table-container:focus-within {
+  box-shadow: none;
+}
+
+table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-family: var(--font-family);
+  font-size: 14px;
+  color: #374151;
+}
+
+th {
+  font-family: var(--font-family);
+  font-weight: 600;
+  color: #111827;
+  text-align: left;
+  padding: 10px 16px;
+  border-bottom: 2px solid #e5e7eb;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: #fafbfc !important;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+th:first-child {
+  padding-left: 20px;
+}
+
+th:last-child {
+  padding-right: 20px;
+}
+
+td {
+  padding: 10px 16px;
+  border-bottom: 1px solid #f3f4f6;
+  vertical-align: middle;
+  font-family: var(--font-family);
+  font-weight: 400;
+  color: #4b5563;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+td:first-child {
+  padding-left: 20px;
+}
+
+td:last-child {
+  padding-right: 20px;
+}
+
+/* Actions column - keep icons in one line */
+td.actions-cell {
+  white-space: nowrap;
+  min-width: fit-content;
+  width: 1%;
+}
+
+.actions-container {
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
+  white-space: nowrap;
+}
+
+td:has(button.mat-mdc-icon-button) {
+  white-space: nowrap;
+  min-width: fit-content;
+}
+
+tr.mat-row {
+  transition: all 0.2s ease;
+}
+
+tr.mat-row:hover td {
+  background-color: #f9fafb;
+  color: #111827;
+}
+
+tr.mat-row:nth-child(even) td {
+  background-color: #fafbfc;
+}
+
+tr.mat-row:nth-child(even):hover td {
+  background-color: #f3f4f6;
+}
+
+tr.mat-row.selected-row td {
+  background-color: #e3f2fd !important;
+  border-left: 4px solid #1976d2;
+}
+
+tr.mat-row.selected-row:hover td {
+  background-color: #e3f2fd !important;
+}
+
+tr.mat-row:last-child td {
+  border-bottom: none;
+}
+
+td button.mat-icon-button {
+  width: 28px;
+  height: 28px;
+  min-width: 28px;
+  font-size: 16px;
+  opacity: 0.8;
+}
+
+td button.mat-icon-button:hover {
+  opacity: 1;
+}
+
+td button.mat-icon-button .mat-icon {
+  opacity: 0.8;
+}
+
+td button.mat-icon-button:hover .mat-icon {
+  opacity: 1;
+}
+
+.paginator-container {
+  padding: 8px;
+  background-color: #fafbfc;
+  border-radius: 16px;
+  box-shadow: none;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid #e5e7eb;
+  margin-top: 0.5rem;
+}
+
+.paginator-container:hover {
+  box-shadow: none;
+  border-color: #d1d5db;
+}
+
+mat-paginator {
+  border-radius: 12px;
+  background-color: transparent;
+  font-family: var(--font-family);
+  font-size: 13px;
+  color: #4b5563;
+}
+
+/* Reduce paginator height */
+mat-paginator ::ng-deep .mat-mdc-paginator-container {
+  min-height: 40px !important;
+  padding: 4px 8px !important;
+}
+
+mat-paginator ::ng-deep .mat-mdc-form-field {
+  --mat-form-field-container-height: 32px !important;
+  --mat-form-field-container-vertical-padding: 4px !important;
+}
+
+mat-paginator ::ng-deep .mat-mdc-icon-button {
+  width: 32px !important;
+  height: 32px !important;
+  padding: 4px !important;
+}
+
+mat-paginator ::ng-deep .mat-mdc-paginator-icon {
+  width: 20px !important;
+  height: 20px !important;
+}
+
+/* Override Material paginator layout to put range label on left */
+mat-paginator ::ng-deep .mat-mdc-paginator-container {
+  justify-content: space-between !important;
+  position: relative;
+}
+
+mat-paginator ::ng-deep .mat-mdc-paginator-range-label {
+  position: absolute;
+  left: 8px;
+  margin: 0 !important;
+}
+
+/* Group page size selector and navigation buttons on the right */
+mat-paginator ::ng-deep .mat-mdc-paginator-page-size {
+  margin-left: auto;
+  margin-right: 0;
+  order: 2;
+}
+
+mat-paginator ::ng-deep .mat-mdc-paginator-range-actions {
+  display: flex;
+  align-items: center;
+  order: 3;
+  margin-left: 0;
+}
+
+th:first-child {
+  border-top-left-radius: 16px;
+}
+
+th:last-child {
+  border-top-right-radius: 16px;
+}
+
+tr:last-child td:first-child {
+  border-bottom-left-radius: 16px;
+}
+
+tr:last-child td:last-child {
+  border-bottom-right-radius: 16px;
+}
+
+/* Improved mat-sort-header styling */
+th mat-sort-header {
+  cursor: pointer;
+  user-select: none;
+}
+
+th mat-sort-header:hover {
+  color: #2563eb;
+}
+
+th .mat-sort-header-arrow {
+  opacity: 0.5;
+}
+
+th .mat-sort-header-stem {
+  background-color: #9ca3af;
+}
+
+th .mat-sort-header-indicator {
+  color: #6b7280;
+}
+
+th.mat-sort-header-sorted .mat-sort-header-indicator {
+  color: #2563eb;
+  opacity: 1;
+}
+
+td button.mat-mdc-icon-button {
+  width: 24px !important;
+  height: 24px !important;
+  min-width: 24px !important;
+  padding: 0 !important;
+  margin: 0 4px !important;
+  opacity: 0.8 !important;
+  --mat-icon-button-hover-state-layer-opacity: 0.08;
+  --mat-icon-button-focus-state-layer-opacity: 0.12;
+  --mat-icon-button-pressed-state-layer-opacity: 0.16;
+}
+
+td button.mat-mdc-icon-button .mat-icon {
+  font-size: 20px !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.8 !important;
+}
+
+td button.mat-mdc-icon-button:hover {
+  opacity: 1 !important;
+}
+
+td button.mat-mdc-icon-button:hover .mat-icon {
+  opacity: 1 !important;
+}
+
+.manager-cell {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--font-family);
+}
+
+.manager-cell span {
+  font-family: var(--font-family);
+  font-weight: 500;
+  color: #374151;
+}
+
+.manager-name {
+  font-weight: var(--font-weight-semibold);
+  opacity: 0.85;
+}
+
+/* Status color coding - Badge style */
+.status-pending {
+  font-family: var(--font-family);
+  color: #d97706;
+  font-weight: 600;
+  background-color: #fef3c7;
+  padding: 4px 12px;
+  border-radius: 12px;
+  display: inline-block;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.status-approved {
+  font-family: var(--font-family);
+  color: #059669;
+  font-weight: 600;
+  background-color: #d1fae5;
+  padding: 4px 12px;
+  border-radius: 12px;
+  display: inline-block;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.status-rejected {
+  font-family: var(--font-family);
+  color: #dc2626;
+  font-weight: 600;
+  background-color: #fee2e2;
+  padding: 4px 12px;
+  border-radius: 12px;
+  display: inline-block;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+/* Reports specific styles */
+.radio-icon {
+  font-size: 24px;
+  vertical-align: middle;
+  transition: color 0.2s ease;
+}
+
+.report-name {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--font-family);
+}
+
+.report-name mat-icon {
+  font-size: 24px;
+  width: 24px;
+  height: 24px;
+  color: #6b7280;
+  transition: color 0.2s ease;
+}
+
+.report-name .selected-icon {
+  color: #1976d2;
+}
+
+.category-badge {
+  font-family: var(--font-family);
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 12px;
+  display: inline-block;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.category-badge[data-category="employee"] {
+  color: #1976d2;
+  background-color: #e3f2fd;
+}
+
+.category-badge[data-category="department"] {
+  color: #7c3aed;
+  background-color: #ede9fe;
+}
+
+.category-badge[data-category="attendance"] {
+  color: #059669;
+  background-color: #d1fae5;
+}
+
+/* Document Type Badge Styles */
+.doc-type-badge {
+  font-family: var(--font-family);
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 12px;
+  display: inline-block;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  /* Default fallback colors */
+  color: #64748b;
+  background-color: #f1f5f9;
+}
+
+.doc-type-badge[data-doc-type="contract"] {
+  color: #1e40af;
+  background-color: #dbeafe;
+}
+
+.doc-type-badge[data-doc-type="certificate"] {
+  color: #000000;
+  background-color: #e5e7eb;
+}
+
+.doc-type-badge[data-doc-type="identity"],
+.doc-type-badge[data-doc-type="identity-document"] {
+  color: #15803d;
+  background-color: #dcfce7;
+}
+
+.doc-type-badge[data-doc-type="military"],
+.doc-type-badge[data-doc-type="military-id"] {
+  color: #ea580c;
+  background-color: #ffedd5;
+}
+
+.doc-type-badge[data-doc-type="default"],
+.doc-type-badge[data-doc-type="unknown"] {
+  color: #64748b;
+  background-color: #f1f5f9;
+}
+
+/* Old Document Type Badge Styles (kept for backward compatibility) */
+.doc-type-contract {
+  font-family: var(--font-family);
+  color:rgb(108, 1, 1);
+  font-weight: 600;
+  background-color:rgb(221, 222, 223);
+  padding: 4px 12px;
+  border-radius: 12px;
+  display: inline-block;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.doc-type-certificate {
+  font-family: var(--font-family);
+  color: #7c3aed;
+  font-weight: 600;
+  background-color: #ede9fe;
+  padding: 4px 12px;
+  border-radius: 12px;
+  display: inline-block;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.doc-type-identity {
+  font-family: var(--font-family);
+  color: #059669;
+  font-weight: 600;
+  background-color: #d1fae5;
+  padding: 4px 12px;
+  border-radius: 12px;
+  display: inline-block;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.doc-type-military {
+  font-family: var(--font-family);
+  color: #d97706;
+  font-weight: 600;
+  background-color: #fef3c7;
+  padding: 4px 12px;
+  border-radius: 12px;
+  display: inline-block;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.doc-type-default {
+  font-family: var(--font-family);
+  color: #64748b;
+  font-weight: 600;
+  background-color: #f1f5f9;
+  padding: 4px 12px;
+  border-radius: 12px;
+  display: inline-block;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.change-manager-btn {
+  height: 28px;
+  min-width: 28px;
+  padding: 0 8px;
+  font-size: 12px;
+  font-family: var(--font-family);
+}
+
+/* Ensure all text content in table cells uses the font */
+td span,
+td div,
+td button {
+  font-family: var(--font-family);
+}
+
+.file-type-icon {
+  color: #1976d2;
+  font-size: 28px;
+  width: 28px;
+  height: 28px;
+}
+
+/* Mobile Responsive Styles */
+@media (max-width: 800px) {
+  .table-container {
+    border-radius: 8px;
+    padding: 2px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  }
+
+  table {
+    font-size: 12px;
+    min-width: 600px;
+  }
+
+  th {
+    padding: 8px 6px;
+    font-size: 11px;
+    white-space: nowrap;
+  }
+
+  td {
+    padding: 6px 6px;
+    font-size: 12px;
+  }
+
+  /* Keep actions in one line on mobile too */
+  td.actions-cell {
+    white-space: nowrap;
+    min-width: fit-content;
+    width: 1%;
+  }
+
+  .actions-container {
+    display: inline-flex;
+    align-items: center;
+    gap: 0;
+  }
+
+  td:has(button.mat-mdc-icon-button) {
+    white-space: nowrap;
+    min-width: fit-content;
+  }
+
+  td button.mat-mdc-icon-button {
+    width: 20px !important;
+    height: 20px !important;
+    min-width: 20px !important;
+    margin: 0 2px !important;
+  }
+
+  td button.mat-mdc-icon-button .mat-icon {
+    font-size: 18px !important;
+  }
+
+  .paginator-container {
+    border-radius: 8px;
+    padding: 2px;
+  }
+
+  mat-paginator {
+    font-size: 11px;
+  }
+
+  .manager-cell {
+    gap: 6px;
+    font-size: 11px;
+  }
+
+  .change-manager-btn {
+    height: 24px;
+    min-width: 24px;
+    padding: 0 6px;
+    font-size: 10px;
+  }
+}

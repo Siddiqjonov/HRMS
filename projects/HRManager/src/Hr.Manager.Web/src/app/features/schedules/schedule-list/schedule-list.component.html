@@ -1,0 +1,40 @@
+<app-loading-spinner [loading]="isLoading"></app-loading-spinner>
+
+@if(errorMessage) {
+<app-error-display [message]="errorMessage"></app-error-display>
+}
+
+<div class="actions-and-table-wrapper">
+  <div class="schedule-management">
+    <h2>Schedule Management <mat-icon>schedule</mat-icon></h2>
+  </div>
+
+  <button class="add-btn" mat-flat-button color="primary" (click)="onAddSchedule()">
+    <mat-icon>schedule</mat-icon>
+    Add Schedule
+  </button>
+
+  @if (dataSource.data.length === 0 && !isLoading && !errorMessage) {
+    <app-empty-state 
+      message="No schedules found" 
+      icon="schedule"
+      description="Start by adding your first schedule using the button above.">
+    </app-empty-state>
+  } @else {
+    <app-data-table
+      [dataSource]="dataSource"
+      [displayedColumns]="displayedColumns"
+      [length]="paginationResult?.totalCount || 0"
+      [pageSize]="paginationResult?.pageSize || 10"
+      [pageIndex]="(paginationResult?.page || 1) - 1"
+      [paginatorLabel]="'Schedules'"
+      (pageChange)="onPageChange($event)"
+      (edit)="onEditSchedule($event)"
+      (delete)="onDeleteSchedule($event)"
+      (view)="onViewSchedule($event)"
+      (viewEmployees)="onViewEmployees($event)"
+    >
+    </app-data-table>
+  }
+</div>
+

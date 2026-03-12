@@ -1,0 +1,82 @@
+<div class="dashboard-container">
+  <div class="dashboard-header">
+    <h1 class="dashboard-title">
+      Dashboard
+      <mat-icon>dashboard</mat-icon>
+    </h1>
+  </div>
+
+  <div class="dashboard-grid">
+    <!-- Welcome Section - Full Width -->
+    <div class="grid-item span-full">
+      <app-welcome-widget [userName]="userName"></app-welcome-widget>
+    </div>
+
+    <!-- Attendance Clock -->
+    <div class="grid-item">
+      <app-attendance-clock-widget 
+        [employeeId]="employeeId"
+        (attendanceUpdated)="onAttendanceUpdated()">
+      </app-attendance-clock-widget>
+    </div>
+
+    <!-- My Attendance Summary -->
+    <div class="grid-item">
+      <app-attendance-summary-widget [employeeId]="employeeId"></app-attendance-summary-widget>
+    </div>
+
+    <!-- Upcoming Leaves -->
+    <div class="grid-item">
+      <app-upcoming-leaves-widget [employeeId]="employeeId"></app-upcoming-leaves-widget>
+    </div>
+
+    <!-- Recent Requests -->
+    <div class="grid-item">
+      <app-recent-requests-widget [employeeId]="employeeId"></app-recent-requests-widget>
+    </div>
+
+    <!-- Department Manager Specific Widgets -->
+    @if (isDepartmentManager) {
+      <!-- Pending Approvals - Span 2 columns -->
+      <div class="grid-item span-2">
+        <app-pending-approvals-widget 
+          [employeeId]="employeeId"
+          (approvalProcessed)="onApprovalProcessed()">
+        </app-pending-approvals-widget>
+      </div>
+
+      <!-- Team Attendance -->
+      <div class="grid-item span-2">
+        <app-team-attendance-widget></app-team-attendance-widget>
+      </div>
+
+      <!-- Department Overview - Span 2 columns -->
+      <div class="grid-item span-2">
+        <app-department-overview-widget></app-department-overview-widget>
+      </div>
+
+      <!-- Team Leave Calendar -->
+      <div class="grid-item span-2">
+        <app-team-leave-calendar-widget></app-team-leave-calendar-widget>
+      </div>
+    }
+
+    <!-- Admin/HrManager Only Widgets -->
+    @if (isManagerOrAdmin) {
+      <!-- Employee Statistics -->
+      <div class="grid-item">
+        <app-employee-statistics-widget></app-employee-statistics-widget>
+      </div>
+
+      <!-- Company-wide Attendance - Span 2 columns -->
+      <div class="grid-item span-2">
+        <app-company-attendance-widget></app-company-attendance-widget>
+      </div>
+
+      <!-- Upcoming Birthdays -->
+      <div class="grid-item">
+        <app-upcoming-birthdays-widget></app-upcoming-birthdays-widget>
+      </div>
+    }
+  </div>
+</div>

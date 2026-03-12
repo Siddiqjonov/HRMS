@@ -1,0 +1,178 @@
+.attendance-clock-card {
+  height: 100%;
+}
+
+mat-card-header {
+  margin-bottom: 1rem;
+}
+
+mat-card-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+mat-card-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.time-display {
+  text-align: center;
+  padding: 1rem;
+  background-color: #f5f5f5;
+  border-radius: 8px;
+}
+
+.current-time {
+  font-size: 2rem;
+  font-weight: 600;
+  color: #1976d2;
+  font-family: 'Courier New', monospace;
+}
+
+.current-date {
+  font-size: 0.875rem;
+  color: #666;
+  margin-top: 0.5rem;
+}
+
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 2rem;
+  color: #666;
+}
+
+.spinning {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.action-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+}
+
+.clock-button {
+  width: 100%;
+  padding: 1rem;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.check-in-button {
+  background-color: #4caf50;
+  color: white;
+}
+
+.check-in-button:hover:not(:disabled) {
+  background-color: #45a049;
+}
+
+.check-out-button {
+  background-color: #ff9800;
+  color: white;
+}
+
+.check-out-button:hover:not(:disabled) {
+  background-color: #e68900;
+}
+
+.status-text {
+  text-align: center;
+  color: #666;
+  font-size: 0.875rem;
+  margin: 0;
+}
+
+.check-in-info {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1rem;
+  background-color: #e3f2fd;
+  border-radius: 8px;
+  border-left: 4px solid #1976d2;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.info-row .label {
+  font-weight: 500;
+  color: #333;
+}
+
+.info-row .value {
+  font-weight: 600;
+  color: #1976d2;
+}
+
+.info-row.overtime {
+  color: #ff9800;
+}
+
+.info-row.overtime .value {
+  color: #ff9800;
+}
+
+.late-badge {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: #f44336;
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-top: 0.5rem;
+}
+
+.completed-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.completed-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1rem;
+  background-color: #e8f5e9;
+  border-radius: 8px;
+  border-left: 4px solid #4caf50;
+}
+
+.completed-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: #4caf50;
+  font-weight: 600;
+  padding: 0.75rem;
+  background-color: #e8f5e9;
+  border-radius: 8px;
+}
+
+@media (max-width: 768px) {
+  .current-time {
+    font-size: 1.5rem;
+  }
+}
+

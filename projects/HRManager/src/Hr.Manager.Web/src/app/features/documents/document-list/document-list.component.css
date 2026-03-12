@@ -1,0 +1,165 @@
+.actions-and-table-wrapper {
+  padding-left: 100px;
+  padding-right: 100px;
+  margin-top: 0.5cm;
+  padding-top: 0;
+  font-weight: 500;
+}
+
+.header-section {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+}
+
+.document-management {
+  display: inline-block;
+}
+
+.document-management h2 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.buttons-container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.filter-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0.5rem 1rem;
+}
+
+.add-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0.5rem 1rem;
+  padding-left: 20px;
+}
+
+/* Active Filters Section */
+.active-filters {
+  background-color: #f5f5f5;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 2rem;
+  border-left: 4px solid #1976d2;
+}
+
+.filters-container {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.filters-label {
+  font-weight: 600;
+  color: #333;
+  white-space: nowrap;
+}
+
+.filter-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  flex: 1;
+  min-width: 0;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+.filter-chips::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+.filter-chip {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: #e3f2fd;
+  border: 1px solid #90caf9;
+  border-radius: 20px;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  color: #1565c0;
+}
+
+.chip-close {
+  width: 24px;
+  height: 24px;
+  line-height: 24px;
+  padding: 0;
+  margin-left: 0.5rem;
+}
+
+.chip-close mat-icon {
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
+}
+
+.clear-all-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Responsive Design */
+@media (max-width: 800px) {
+  .actions-and-table-wrapper {
+    padding-left: 16px;
+    padding-right: 16px;
+    margin-top: 1rem;
+  }
+
+  .header-section {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .document-management {
+    display: block;
+    width: 100%;
+  }
+
+  .document-management h2 {
+    font-size: 1.25rem;
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .buttons-container {
+    width: 100%;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .filter-btn,
+  .add-btn {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .filter-chips {
+    gap: 0.5rem;
+  }
+}

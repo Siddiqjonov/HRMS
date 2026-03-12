@@ -1,0 +1,62 @@
+.welcome-card {
+  height: 100%;
+  background-color: var(--base-clr);
+  border: 1px solid var(--line-clr);
+  transition: background-color 200ms ease;
+}
+
+.welcome-card:hover {
+  background-color: var(--hover-clr);
+}
+
+.welcome-content {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1rem;
+}
+
+.welcome-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  background-color: var(--accent-clr);
+  border-radius: 50%;
+  transition: transform 200ms ease;
+}
+
+.welcome-card:hover .welcome-icon {
+  transform: scale(1.05);
+}
+
+.welcome-icon mat-icon {
+  font-size: 32px;
+  width: 32px;
+  height: 32px;
+  color: white;
+}
+
+.welcome-text h2 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.5rem;
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-clr);
+}
+
+.welcome-text .date {
+  margin: 0 0 0.5rem 0;
+  opacity: 0.8;
+  font-size: 0.9rem;
+  color: var(--text-clr);
+}
+
+.welcome-text .subtitle {
+  margin: 0;
+  opacity: 0.7;
+  font-size: 0.95rem;
+  color: var(--text-clr);
+  font-weight: var(--font-weight-medium);
+}
+

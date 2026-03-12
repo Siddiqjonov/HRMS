@@ -1,0 +1,42 @@
+<h2 mat-dialog-title>
+    <mat-icon>person</mat-icon>
+    {{ data.firstName }} {{ data.middleName }} {{ data.lastName }}
+</h2>
+
+<mat-dialog-content>
+    <p><strong>First Name:</strong> {{ data.firstName }}</p>
+    <p><strong>Middle Name:</strong> {{ data.middleName }}</p>
+    <p><strong>Last Name:</strong> {{ data.lastName }}</p>
+    <p><strong>Email:</strong> {{ data.email }}</p>
+    <p><strong>Phone:</strong> {{ data.phoneNumber }}</p>
+    <p><strong>Gender:</strong> {{ data.gender === 0 ? 'Male' : 'Female' }}</p>
+    <p><strong>Date of Birth:</strong> {{ data.dateOfBirth }}</p>
+    <p><strong>Nationality:</strong> {{ data.nationality }}</p>
+    <p><strong>Passport Number:</strong> {{ data.passportNumber }}</p>
+    <p><strong>PINFL:</strong> {{ data.pinfl }}</p>
+    <p><strong>Pension Fund Number:</strong> {{ data.pensionFundNumber }}</p>
+    <p><strong>Tax ID (INN):</strong> {{ data.taxIdentificationNumber }}</p>
+
+    <p><strong>Department:</strong> {{ data.departmentName }}</p>
+    <p><strong>Position:</strong> {{ data.positionName }}</p>
+    <p><strong>Salary:</strong> {{ data.salary }}</p>
+
+    <p><strong>Hire Date:</strong> {{ data.hireDate }}</p>
+
+    @if (data.terminationDate) {
+    <p><strong>Termination Date:</strong> {{ data.terminationDate }}</p>
+    }
+
+    <h3>Address</h3>
+    <p><strong>Region:</strong> {{ data.address.region }}</p>
+    <p><strong>Street:</strong> {{ data.address.street }}</p>
+    <p><strong>House:</strong> {{ data.address.house }}</p>
+    <p><strong>Apartment:</strong> {{ data.address.apartment }}</p>
+    <p><strong>Full Address:</strong> {{ data.address.fullAddress }}</p>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+    <button matButton="outlined" (click)="close()">
+        Close
+    </button>
+</mat-dialog-actions>

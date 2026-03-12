@@ -1,0 +1,14 @@
+﻿namespace HrManager.Domain.Dtos;
+
+public class ScheduleDto
+{
+    public string Name { get; set; }
+
+    public string Description { get; set; }
+
+    public TimeOnly StartTime { get; set; }
+
+    public TimeOnly EndTime { get; set; }
+
+    public DaysOfWeek DaysOfWeek { get; set; }
+}

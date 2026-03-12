@@ -1,0 +1,54 @@
+@if (isLoading) {
+  <app-widget-skeleton type="stats"></app-widget-skeleton>
+} @else {
+  <mat-card class="attendance-summary-card">
+    <mat-card-header>
+      <mat-card-title>My Attendance Summary</mat-card-title>
+      <mat-card-subtitle>This Month</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="summary-stats">
+        <div class="stat-item late">
+          <mat-icon class="stat-icon">schedule</mat-icon>
+          <div class="stat-info">
+            <span class="stat-value">{{ summary.lateDays }}</span>
+            <span class="stat-label">Late Arrivals</span>
+          </div>
+        </div>
+        
+        <div class="stat-item early-departure">
+          <mat-icon class="stat-icon">logout</mat-icon>
+          <div class="stat-info">
+            <span class="stat-value">{{ summary.earlyDepartures }}</span>
+            <span class="stat-label">Early Departures</span>
+          </div>
+        </div>
+        
+        <div class="stat-item hours">
+          <mat-icon class="stat-icon">access_time</mat-icon>
+          <div class="stat-info">
+            <span class="stat-value">{{ formatMinutes(summary.totalMinutes) }}</span>
+            <span class="stat-label">Total Time</span>
+          </div>
+        </div>
+
+        <div class="stat-item overtime">
+          <mat-icon class="stat-icon">add_alarm</mat-icon>
+          <div class="stat-info">
+            <span class="stat-value">{{ formatMinutes(summary.overtimeMinutes) }}</span>
+            <span class="stat-label">Overtime</span>
+          </div>
+        </div>
+
+        <div class="stat-item average">
+          <mat-icon class="stat-icon">trending_up</mat-icon>
+          <div class="stat-info">
+            <span class="stat-value">{{ formatMinutes(summary.averageMinutes) }}</span>
+            <span class="stat-label">Avg Per Day</span>
+          </div>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+}
+

@@ -1,0 +1,44 @@
+@if (isLoading) {
+  <app-widget-skeleton type="list"></app-widget-skeleton>
+} @else {
+  <mat-card class="upcoming-leaves-card">
+    <mat-card-header>
+      <mat-card-title>Upcoming Leaves</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      @if (leaves.length > 0) {
+      <div class="leaves-list">
+        @for (leave of leaves; track leave.id) {
+          <div class="leave-item">
+            <div class="leave-icon">
+              <mat-icon>event_available</mat-icon>
+            </div>
+            <div class="leave-info">
+              <div class="leave-header">
+                <span class="leave-type">{{ getTypeText(leave.type) }}</span>
+                <span class="leave-badge" [class]="getStatusColor(leave.status)">
+                  {{ getStatusText(leave.status) }}
+                </span>
+              </div>
+              <div class="leave-dates">
+                <mat-icon class="date-icon">date_range</mat-icon>
+                {{ formatDate(leave.startDate) }} - {{ formatDate(leave.endDate) }}
+              </div>
+              <div class="leave-duration">
+                <mat-icon class="duration-icon">schedule</mat-icon>
+                {{ leave.daysRequested }} day{{ leave.daysRequested > 1 ? 's' : '' }}
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    } @else {
+      <div class="empty-state">
+        <mat-icon>event_busy</mat-icon>
+        <p>No upcoming leaves</p>
+      </div>
+      }
+    </mat-card-content>
+  </mat-card>
+}
+

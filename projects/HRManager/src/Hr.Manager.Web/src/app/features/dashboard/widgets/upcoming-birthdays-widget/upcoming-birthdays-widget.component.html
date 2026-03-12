@@ -1,0 +1,53 @@
+@if (isLoading) {
+  <app-widget-skeleton 
+    type="list" 
+    title="Upcoming Birthdays">
+  </app-widget-skeleton>
+} @else {
+  <mat-card class="upcoming-birthdays-card">
+    <mat-card-header>
+      <mat-card-title>
+        <mat-icon>cake</mat-icon>
+        Upcoming Birthdays
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      @if (birthdays.length > 0) {
+      <div class="birthdays-list">
+        @for (birthday of birthdays; track birthday.id) {
+          <div class="birthday-item" [class.today]="isToday(birthday.date)">
+            <div class="birthday-icon">
+              <mat-icon>celebration</mat-icon>
+            </div>
+            <div class="birthday-info">
+              <div class="birthday-header">
+                <span class="employee-name">{{ birthday.employeeName }}</span>
+                @if (birthday.age) {
+                  <span class="age-badge">{{ birthday.age }} yrs</span>
+                }
+              </div>
+              <div class="birthday-details">
+                <span class="department">{{ birthday.department }}</span>
+                <span class="date-badge" [class.highlight]="isToday(birthday.date) || isTomorrow(birthday.date)">
+                  {{ getDateLabel(birthday.date) }}
+                </span>
+              </div>
+            </div>
+            @if (isToday(birthday.date)) {
+              <button mat-icon-button color="primary" class="wish-button">
+                <mat-icon>card_giftcard</mat-icon>
+              </button>
+            }
+          </div>
+        }
+      </div>
+      } @else {
+        <div class="empty-state">
+          <mat-icon>cake</mat-icon>
+          <p>No upcoming birthdays</p>
+        </div>
+      }
+    </mat-card-content>
+  </mat-card>
+}
+

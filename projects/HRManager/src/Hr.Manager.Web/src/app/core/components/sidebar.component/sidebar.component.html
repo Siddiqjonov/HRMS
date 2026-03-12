@@ -1,0 +1,52 @@
+<nav id="sidebar" [class.close]="!sidebarOpen">
+  <ul>
+    <li>
+      <span class="logo">HR Manager</span>
+      <button (click)="toggleSidebar()" id="toggle-btn" class="toggle-button">
+        <mat-icon>{{ sidebarOpen ? 'keyboard_double_arrow_left' : 'keyboard_double_arrow_right' }}</mat-icon>
+      </button>
+    </li>
+
+    @for (item of navigationItems; track item.route) { @if (!item.children || item.children.length
+    === 0) {
+    <li
+      [routerLink]="item.route"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: true }"
+    >
+      <a>
+        <mat-icon>{{ item.icon }}</mat-icon>
+        <span>{{ item.label }}</span>
+      </a>
+    </li>
+    } @else {
+    <li>
+      <button
+        (click)="toggleSubMenu(item, $event)"
+        class="dropdown-btn"
+        [class.rotate]="isExpanded(item)"
+      >
+        <mat-icon>{{ item.icon }}</mat-icon>
+        <span>{{ item.label }}</span>
+        <mat-icon class="dropdown-arrow">expand_more</mat-icon>
+      </button>
+      <ul class="sub-menu" [class.show]="isExpanded(item)">
+        <div>
+          @for (child of item.children; track child.route) {
+          <li [class.active]="isChildRouteActive(child.route)">
+            <a [routerLink]="child.route">{{ child.label }}</a>
+          </li>
+          }
+        </div>
+      </ul>
+    </li>
+    } }
+
+    <li class="logout-item">
+      <button (click)="logout()" class="logout-btn">
+        <mat-icon>logout</mat-icon>
+        <span>Sign Out</span>
+      </button>
+    </li>
+  </ul>
+</nav>

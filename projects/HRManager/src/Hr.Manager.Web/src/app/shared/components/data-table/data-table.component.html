@@ -1,0 +1,132 @@
+<div class="table-wrapper">
+<div class="table-container" [class.no-pagination]="!showPagination">
+  <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+    @for (column of displayedColumns; track column.key) {
+    <ng-container [matColumnDef]="column.key">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ column.label }}</th>
+      <td mat-cell *matCellDef="let element" [class.actions-cell]="column.key === 'actions'">
+        @if(column.key === 'actions') {
+        <div class="actions-container">
+          @if (showViewButton) {
+          <button mat-icon-button color="primary" (click)="view.emit(element)" [matTooltip]="customViewTooltip">
+            <mat-icon>{{ customViewIcon }}</mat-icon>
+          </button>
+          }
+          @if (showEditButton) {
+          <button mat-icon-button color="accent" (click)="edit.emit(element)" [matTooltip]="customEditTooltip">
+            <mat-icon>{{ customEditIcon }}</mat-icon>
+          </button>
+          }
+          @if (showDeleteButton) {
+          <button mat-icon-button color="warn" (click)="delete.emit(element)" matTooltip="Delete">
+            <mat-icon>delete</mat-icon>
+          </button>
+          }
+          @if (element.daysOfWeek !== undefined || element.departmentId !== undefined) {
+          <button mat-icon-button (click)="viewEmployees.emit(element)" matTooltip="Employees">
+            <mat-icon>people</mat-icon>
+          </button>
+          }
+          @if (showApproveReject) {
+            <button 
+              mat-icon-button 
+              color="primary" 
+              [disabled]="element.status !== 'Pending'"
+              (click)="element.status === 'Pending' && approve.emit(element)" 
+              matTooltip="Approve" 
+              [style.color]="element.status === 'Pending' ? '#4caf50' : '#ccc'">
+              <mat-icon>check_circle</mat-icon>
+            </button>
+            <button 
+              mat-icon-button 
+              color="warn" 
+              [disabled]="element.status !== 'Pending'"
+              (click)="element.status === 'Pending' && reject.emit(element)" 
+              matTooltip="Reject" 
+              [style.color]="element.status === 'Pending' ? '#f44336' : '#ccc'">
+              <mat-icon>cancel</mat-icon>
+            </button>
+          }
+        </div>
+        } @else if (column.key === 'manager') { @if (element.manager && element.manager.fullName) {
+        <div class="manager-cell">
+          <span>{{ element.manager.fullName }}</span>
+          <button
+            type="button"
+            mat-stroked-button
+            color="primary"
+            (click)="assignManager.emit(element)"
+          >
+            <mat-icon>edit</mat-icon>
+            Change Manager
+          </button>
+        </div>
+        } @else {
+        <button mat-stroked-button color="primary" (click)="assignManager.emit(element)">
+          <mat-icon>person_add</mat-icon>
+          Assign Manager
+        </button>
+        }         } @else if (column.key === 'daysOfWeek') {
+        {{ formatDaysOfWeek(element[column.key]) }}
+        } @else if (column.key === 'status') {
+        <span [class.status-pending]="element.status === 'Pending'"
+              [class.status-approved]="element.status === 'Approved'"
+              [class.status-rejected]="element.status === 'Rejected'">
+          {{ element[column.key] }}
+        </span>
+        } @else if (column.key === 'isLateDisplay') {
+        <span [class.status-rejected]="element.isLateDisplay === 'Late'"
+              [class.status-approved]="element.isLateDisplay === 'On Time'">
+          {{ element[column.key] }}
+        </span>
+        } @else if (column.key === 'isEarlyDepartureDisplay') {
+        <span [class.status-rejected]="element.isEarlyDepartureDisplay === 'Early Departure'"
+              [class.status-approved]="element.isEarlyDepartureDisplay === 'On Time'">
+          {{ element[column.key] }}
+        </span>
+        } @else if (column.key === 'select') {
+        <mat-icon class="radio-icon" [style.color]="selectedItem?.id === element.id ? '#1976d2' : '#ccc'">
+          {{ selectedItem?.id === element.id ? 'radio_button_checked' : 'radio_button_unchecked' }}
+        </mat-icon>
+        } @else if (column.key === 'category') {
+        <span class="category-badge" [attr.data-category]="element.category">
+          {{ getCategoryLabel ? getCategoryLabel(element.category) : element.category }}
+        </span>
+        } @else if (column.key === 'title' && element.icon) {
+        <div class="report-name">
+          <mat-icon [class.selected-icon]="selectedItem?.id === element.id">{{ element.icon }}</mat-icon>
+          <span>{{ element[column.key] }}</span>
+        </div>
+        } @else if (column.key === 'documentType' || column.key === 'documentTypeLabel') {
+        <span class="doc-type-badge" [attr.data-doc-type]="getDocumentTypeForBadge(element)">
+          {{ element[column.key] }}
+        </span>
+        } @else {
+        {{ element[column.key] }}
+        }
+      </td></ng-container
+    >
+    }
+
+    <tr mat-header-row *matHeaderRowDef="columnKeys"></tr>
+    <tr mat-row *matRowDef="let row; columns: columnKeys" 
+        (click)="onRowClick(row)" 
+        [style.cursor]="rowClick.observers.length > 0 ? 'pointer' : 'default'"
+        [class.selected-row]="selectedItem?.id === row.id"></tr>
+  </table>
+</div>
+</div>
+
+@if (showPagination) {
+<div class="paginator-container">
+  <mat-paginator
+    [length]="length"
+    [pageSize]="pageSize"
+    [pageIndex]="pageIndex"
+    [pageSizeOptions]="[5, 10, 15, 20]"
+    showFirstLastButtons
+  >
+  </mat-paginator>
+</div>
+}
+

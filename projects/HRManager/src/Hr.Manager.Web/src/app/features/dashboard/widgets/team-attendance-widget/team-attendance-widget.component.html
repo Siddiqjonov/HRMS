@@ -1,0 +1,68 @@
+@if (isLoading) {
+  <app-widget-skeleton type="list"></app-widget-skeleton>
+} @else {
+  <mat-card class="team-attendance-card">
+    <mat-card-header>
+      <mat-card-title>Team Attendance</mat-card-title>
+      <mat-card-subtitle>{{ departmentName }} - Today's Status</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="attendance-summary">
+        <div class="summary-item present">
+          <mat-icon>check_circle</mat-icon>
+          <div class="summary-text">
+            <span class="count">{{ presentCount }}</span>
+            <span class="label">Present</span>
+          </div>
+        </div>
+        <div class="summary-item late">
+          <mat-icon>schedule</mat-icon>
+          <div class="summary-text">
+            <span class="count">{{ lateCount }}</span>
+            <span class="label">Late</span>
+          </div>
+        </div>
+        <div class="summary-item absent">
+          <mat-icon>cancel</mat-icon>
+          <div class="summary-text">
+            <span class="count">{{ absentCount }}</span>
+            <span class="label">Absent</span>
+          </div>
+        </div>
+        <div class="summary-item on-leave">
+          <mat-icon>event_available</mat-icon>
+          <div class="summary-text">
+            <span class="count">{{ onLeaveCount }}</span>
+            <span class="label">On Leave</span>
+          </div>
+        </div>
+      </div>
+
+      @if (teamMembers.length > 0) {
+        <div class="team-list">
+          @for (member of teamMembers; track member.id) {
+            <div class="team-member" [class]="getStatusClass(member.status)">
+              <div class="member-info">
+                <mat-icon class="status-icon">{{ getStatusIcon(member.status) }}</mat-icon>
+                <span class="member-name">{{ member.name }}</span>
+              </div>
+              @if (member.checkInTime) {
+                <span class="check-in-time">
+                  In: {{ member.checkInTime }}
+                  @if (member.checkOutTime) {
+                    <span> | Out: {{ member.checkOutTime }}</span>
+                  }
+                </span>
+              }
+            </div>
+          }
+        </div>
+      } @else {
+        <div class="empty-state">
+          <mat-icon>group</mat-icon>
+          <p>No team members found</p>
+        </div>
+      }
+    </mat-card-content>
+  </mat-card>
+}

@@ -1,0 +1,44 @@
+@if (isLoading) {
+  <app-widget-skeleton 
+    [title]="'Team Leave Calendar'" 
+    [subtitle]="'Upcoming Absences'">
+  </app-widget-skeleton>
+} @else {
+  <mat-card class="team-leave-calendar-card">
+    <mat-card-header>
+      <mat-card-title>Team Leave Calendar</mat-card-title>
+      <mat-card-subtitle>Upcoming Absences</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      @if (leaves && leaves.length > 0) {
+        <div class="calendar-timeline">
+          @for (leave of leaves; track leave.id) {
+            <div class="timeline-item" [style.border-left-color]="getLeaveColor(leave.leaveType)">
+              <div class="timeline-marker" [style.background-color]="getLeaveColor(leave.leaveType)">
+                <mat-icon>event</mat-icon>
+              </div>
+              <div class="timeline-content">
+                <div class="leave-header">
+                  <span class="employee-name">{{ leave.employeeName }}</span>
+                  <span class="leave-type" [style.background-color]="getLeaveColor(leave.leaveType)">
+                    {{ leave.leaveType }}
+                  </span>
+                </div>
+                <div class="leave-dates">
+                  <mat-icon>date_range</mat-icon>
+                  <span>{{ getDateRange(leave.startDate, leave.endDate) }}</span>
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+      } @else {
+        <div class="empty-state">
+          <mat-icon>event_note</mat-icon>
+          <p>No upcoming team leaves</p>
+        </div>
+      }
+    </mat-card-content>
+  </mat-card>
+}
+

@@ -1,0 +1,21 @@
+<h2 mat-dialog-title>
+    <mat-icon>work</mat-icon>
+    {{ data.title }}
+</h2>
+
+<mat-dialog-content>
+    <h3>General Information</h3>
+    <p><strong>Position Title:</strong> {{ data.title }}</p>
+    <p><strong>Department:</strong> {{ data.departmentName }}</p>
+
+    <h3>Salary Range</h3>
+    <p><strong>Minimum Salary:</strong> {{ data.salaryMin | number:'1.2-2' }}</p>
+    <p><strong>Maximum Salary:</strong> {{ data.salaryMax | number:'1.2-2' }}</p>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+    <button matButton="outlined" (click)="close()">
+        Close
+    </button>
+</mat-dialog-actions>
+

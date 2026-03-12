@@ -1,0 +1,126 @@
+.create-schedule-form {
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 20px;
+}
+
+h2 {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.full-width {
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+.time-section,
+.days-section {
+  margin-bottom: 16px;
+}
+
+.time-section h3,
+.days-section h3 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 16px 0;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.time-inputs {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.time-field {
+  flex: 1;
+  min-width: 200px;
+}
+
+.days-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px;
+}
+
+.days-grid mat-checkbox {
+  padding: 4px;
+}
+
+.days-grid mat-checkbox ::ng-deep .mdc-checkbox__background {
+  border-radius: 50% !important;
+}
+
+.days-grid mat-checkbox ::ng-deep .mdc-checkbox__checkmark {
+  border-radius: 50% !important;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+
+@media (max-width: 800px) {
+  .create-schedule-form {
+    max-width: 100%;
+    margin: 16px;
+    padding: 16px;
+  }
+
+  h2 {
+    font-size: 1.25rem;
+    margin-bottom: 16px;
+  }
+
+  .full-width {
+    margin-bottom: 12px;
+  }
+
+  .time-section,
+  .days-section {
+    margin-bottom: 12px;
+  }
+
+  .time-section h3,
+  .days-section h3 {
+    font-size: 0.9rem;
+    margin: 0 0 12px 0;
+    gap: 6px;
+  }
+
+  .time-section h3 mat-icon,
+  .days-section h3 mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+  }
+
+  .time-inputs {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .time-field {
+    min-width: 100%;
+  }
+
+  .days-grid {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .form-actions {
+    flex-direction: column-reverse;
+    gap: 8px;
+    margin-top: 16px;
+  }
+
+  .form-actions button {
+    width: 100%;
+  }
+}
+

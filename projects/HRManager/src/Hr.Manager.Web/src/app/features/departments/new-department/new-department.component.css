@@ -1,0 +1,80 @@
+.create-department-form {
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 20px;
+}
+
+.full-width {
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+
+h2 {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.manager-section {
+  margin-bottom: 16px;
+}
+
+.manager-section button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.manager-assigned {
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  padding: 16px;
+  background-color: #f9f9f9;
+}
+
+.manager-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+  color: #2e7d32;
+}
+
+.manager-info mat-icon {
+  color: #4caf50;
+  flex-shrink: 0;
+}
+
+.manager-details {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.manager-name {
+  font-weight: 600;
+  font-size: 16px;
+  color: #333;
+}
+
+.manager-position {
+  font-size: 14px;
+  color: #666;
+}
+
+.manager-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.manager-actions button {
+  flex: 1;
+  min-width: 150px;
+}

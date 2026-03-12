@@ -1,0 +1,56 @@
+<h2 mat-dialog-title>
+  <mat-icon class="title-icon">filter_list</mat-icon>
+  Document Filters
+</h2>
+
+<mat-dialog-content>
+  <div class="filter-container">
+    <!-- Employee Selection -->
+    <div class="filter-section">
+      <mat-form-field>
+        <mat-label>Select Employee</mat-label>
+        <input 
+          matInput 
+          [readonly]="true"
+          [value]="selectedEmployee ? selectedEmployee.fullName : ''"
+          placeholder="Select Employee"
+          (click)="onEmployeeInputClick($event)"
+          (keydown)="onEmployeeInputKeydown($event)"
+          class="selection-input">
+        @if (selectedEmployee) {
+          <button mat-icon-button matSuffix (click)="clearEmployee($event)" type="button" class="clear-btn">
+            <mat-icon>close</mat-icon>
+          </button>
+        } @else {
+          <mat-icon matSuffix class="selection-icon" (click)="onEmployeeInputClick($event)">person_search</mat-icon>
+        }
+      </mat-form-field>
+    </div>
+
+    <!-- Document Type Filter -->
+    <div class="filter-section">
+      <mat-form-field appearance="outline">
+        <mat-label>Document Type</mat-label>
+        <mat-select [(ngModel)]="documentType">
+          <mat-option *ngFor="let type of documentTypes" [value]="type.value">
+            {{ type.label }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="center" class="dialog-actions">
+  <button mat-button (click)="onClear()" type="button" class="clear-all-btn">
+    <mat-icon>clear_all</mat-icon>
+    <span class="button-text-full">Clear All</span>
+    <span class="button-text-short">Clear</span>
+  </button>
+  <button mat-button (click)="onCancel()" type="button">Cancel</button>
+  <button mat-raised-button color="primary" (click)="onApply()" type="button" class="apply-btn">
+    <mat-icon>search</mat-icon>
+    <span class="button-text-full">Apply Filters</span>
+    <span class="button-text-short">Apply</span>
+  </button>
+</mat-dialog-actions>

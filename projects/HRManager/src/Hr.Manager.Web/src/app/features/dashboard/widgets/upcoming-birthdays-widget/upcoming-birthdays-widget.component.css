@@ -1,0 +1,169 @@
+.upcoming-birthdays-card {
+  height: 100%;
+}
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 3rem;
+  min-height: 200px;
+}
+
+mat-card-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+mat-card-title mat-icon {
+  color: #ff9800;
+}
+
+.birthdays-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.birthday-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background: #f5f5f5;
+  border-radius: 8px;
+  border-left: 4px solid #ff9800;
+  transition: all 0.3s ease;
+}
+
+.birthday-item:hover {
+  background: #e8e8e8;
+  transform: translateX(4px);
+}
+
+.birthday-item.today {
+  background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+  border-left-color: #ff5722;
+  box-shadow: 0 2px 8px rgba(255, 152, 0, 0.3);
+}
+
+.birthday-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%);
+  border-radius: 50%;
+  color: white;
+  flex-shrink: 0;
+}
+
+.birthday-icon mat-icon {
+  font-size: 28px;
+  width: 28px;
+  height: 28px;
+}
+
+.birthday-info {
+  flex: 1;
+}
+
+.birthday-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.employee-name {
+  font-weight: 600;
+  color: #333;
+  font-size: 1rem;
+}
+
+.age-badge {
+  padding: 0.25rem 0.5rem;
+  background: #e0e0e0;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #666;
+}
+
+.birthday-details {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.department {
+  font-size: 0.875rem;
+  color: #666;
+}
+
+.date-badge {
+  padding: 0.25rem 0.75rem;
+  background: #e3f2fd;
+  color: #1976d2;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+.date-badge.highlight {
+  background: #ffebee;
+  color: #c62828;
+  font-weight: 700;
+}
+
+.wish-button {
+  flex-shrink: 0;
+}
+
+.wish-button mat-icon {
+  color: #ff5722;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: #999;
+}
+
+.empty-state mat-icon {
+  font-size: 48px;
+  width: 48px;
+  height: 48px;
+  margin-bottom: 1rem;
+  color: #ff9800;
+}
+
+.empty-state p {
+  margin: 0;
+  font-size: 1rem;
+}
+
+/* Custom scrollbar */
+.birthdays-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.birthdays-list::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.birthdays-list::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 3px;
+}
+
+.birthdays-list::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+

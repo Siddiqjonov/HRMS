@@ -1,0 +1,222 @@
+<form [formGroup]="employeeForm" (ngSubmit)="onSubmit()" class="employee-form">
+    <h2>{{ isEditMode ? 'Edit Employee' : 'Create Employee' }} <mat-icon>{{ isEditMode ? 'edit' : 'person_add' }}</mat-icon></h2>
+    <div class="form-row">
+        <mat-form-field appearance="outline" class="form-field">
+            <mat-label>First Name</mat-label>
+            <input matInput formControlName="firstName" placeholder="Enter first name" />
+            @if (firstNameRequired) {
+                <mat-error><strong>Required</strong></mat-error>
+            }
+            @else if (firstNameMaxLength) {
+                <mat-error>Max 50 characters</mat-error>
+            }
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Last Name</mat-label>
+            <input matInput formControlName="lastName" placeholder="Enter last name" />
+            @if (lastNameRequired) {
+                <mat-error><strong>Required</strong></mat-error>
+            }
+            @else if (lastNameMaxLength) {
+                <mat-error>Max 50 characters</mat-error>
+            }
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Middle Name</mat-label>
+            <input matInput formControlName="middleName" placeholder="Enter middle name (optional)" />
+        </mat-form-field>
+    </div>
+    <div class="form-row">
+        <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Email</mat-label>
+            <input matInput formControlName="email" placeholder="example@domain.com" />
+            @if (emailRequired) {
+                <mat-error><strong>Required</strong></mat-error>
+            }
+            @else if (emailInvalid) {
+                <mat-error>Invalid email format</mat-error>
+            }
+            @else if (emailDomainInvalid) {
+                <mat-error>Invalid or fake email domain</mat-error>
+            }
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Passport Number</mat-label>
+            <input matInput formControlName="passportNumber" placeholder="AA1234567" />
+            @if (passportRequired) {
+                <mat-error><strong>Required</strong></mat-error>
+            }
+            @else if (passportInvalid) {
+                <mat-error>Invalid passport format (e.g., AA1234567)</mat-error>
+            }
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="form-field">
+            <mat-label>PINFL</mat-label>
+            <input matInput formControlName="pinfl" placeholder="14 digits" maxlength="14" />
+            @if (pinflRequired) {
+                <mat-error><strong>Required</strong></mat-error>
+            }
+            @else if (pinflInvalid) {
+                <mat-error>Invalid PINFL (must be 14 digits)</mat-error>
+            }
+        </mat-form-field>
+    </div>
+    <div class="form-row">
+        <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Nationality</mat-label>
+            <input matInput formControlName="nationality" placeholder="Enter nationality" />
+            @if (nationalityRequired) {
+                <mat-error><strong>Required</strong></mat-error>
+            }
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Gender</mat-label>
+            <mat-select formControlName="gender">
+                <mat-option [value]="0">Male</mat-option>
+                <mat-option [value]="1">Female</mat-option>
+            </mat-select>
+            @if (genderRequired) {
+                <mat-error><strong>Required</strong></mat-error>
+            }
+        </mat-form-field>
+        <mat-form-field class="form-field">
+            <mat-label>Schedule</mat-label>
+            <input matInput [value]="selectedSchedule?.name || ''" placeholder="Select Schedule" readonly 
+                   (click)="assignSchedule()" class="selection-input" />
+            <mat-icon matSuffix class="selection-icon" (click)="assignSchedule()">schedule</mat-icon>
+            @if (scheduleRequired) {
+                <mat-error><strong>Required</strong></mat-error>
+            }
+        </mat-form-field>
+    </div>
+    <div class="form-row">
+        <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Pension Fund Number</mat-label>
+            <input matInput formControlName="pensionFundNumber" placeholder="10-20 alphanumeric characters" />
+            @if (pensionFundInvalid) {
+                <mat-error>Invalid pension fund number (must be 10-20 alphanumeric)</mat-error>
+            }
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Tax Identification Number (TIN)</mat-label>
+            <input matInput formControlName="taxIdentificationNumber" placeholder="9 digits" maxlength="9" />
+            @if (tinInvalid) {
+                <mat-error>Invalid TIN (must be exactly 9 digits)</mat-error>
+            }
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Phone Number</mat-label>
+            <input matInput formControlName="phoneNumber" placeholder="+998XXXXXXXXX" />
+            @if (phoneNumberInvalid) {
+                <mat-error>Invalid phone number (format: +998XXXXXXXXX)</mat-error>
+            }
+        </mat-form-field>
+    </div>
+    <div class="form-row" formGroupName="address">
+        <mat-form-field appearance="outline" class="form-field address-field">
+            <mat-label>Region</mat-label>
+            <input matInput formControlName="region" placeholder="Enter region" />
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="form-field address-field">
+            <mat-label>Street</mat-label>
+            <input matInput formControlName="street" placeholder="Enter street" />
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="form-field address-field">
+            <mat-label>House</mat-label>
+            <input matInput formControlName="house" placeholder="Enter house" />
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="form-field address-field">
+            <mat-label>Apartment</mat-label>
+            <input matInput formControlName="apartment" placeholder="Enter apartment" />
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="form-field address-field">
+            <mat-label>Full Address</mat-label>
+            <input matInput formControlName="fullAddress" placeholder="Auto-generated or enter manually" />
+        </mat-form-field>
+    </div>
+
+    <div class="form-row">
+        <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Date of Birth</mat-label>
+            <input matInput [matDatepicker]="dobPicker" formControlName="dateOfBirth" />
+            <mat-datepicker-toggle matSuffix [for]="dobPicker"></mat-datepicker-toggle>
+            <mat-datepicker #dobPicker></mat-datepicker>
+            @if (dobRequired) {
+                <mat-error><strong>Required</strong></mat-error>
+            }
+            @else if (dobInvalid) {
+                <mat-error>Must be past date</mat-error>
+            }
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Hire Date</mat-label>
+            <input matInput [matDatepicker]="hireDatePicker" formControlName="hireDate" />
+            <mat-datepicker-toggle matSuffix [for]="hireDatePicker"></mat-datepicker-toggle>
+            <mat-datepicker #hireDatePicker></mat-datepicker>
+            @if (hireDateRequired) {
+                <mat-error><strong>Required</strong></mat-error>
+            }
+            @else if (hireDateInvalid) {
+                <mat-error>Cannot be future date</mat-error>
+            }
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Termination Date</mat-label>
+            <input matInput [matDatepicker]="termDatePicker" formControlName="terminationDate" />
+            <mat-datepicker-toggle matSuffix [for]="termDatePicker"></mat-datepicker-toggle>
+            <mat-datepicker #termDatePicker></mat-datepicker>
+        </mat-form-field>
+    </div>
+
+    <div class="form-row">
+        <mat-form-field class="form-field">
+            <mat-label>Department</mat-label>
+            <input matInput [value]="selectedDepartment?.name || ''" placeholder="Select Department" readonly 
+                   (click)="assignDepartment()" class="selection-input" />
+            <mat-icon matSuffix class="selection-icon" (click)="assignDepartment()">apartment</mat-icon>
+            @if (departmentRequired) {
+                <mat-error><strong>Required</strong></mat-error>
+            }
+        </mat-form-field>
+
+        <mat-form-field class="form-field" [class.field-disabled]="!selectedDepartment">
+            <mat-label>Position</mat-label>
+            <input matInput [value]="selectedPosition?.title || ''" 
+                   [placeholder]="selectedDepartment ? 'Select Position' : 'Select department first'" 
+                   readonly 
+                   [disabled]="!selectedDepartment"
+                   (click)="selectedDepartment && assignPosition()" 
+                   [class.selection-input]="selectedDepartment" />
+            <mat-icon matSuffix 
+                      [class.selection-icon]="selectedDepartment" 
+                      [class.disabled-icon]="!selectedDepartment"
+                      (click)="selectedDepartment && assignPosition()">work</mat-icon>
+            @if (positionRequired) {
+                <mat-error><strong>Required</strong></mat-error>
+            }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Salary</mat-label>
+            <input matInput type="number" formControlName="salary" min="1" step="1" 
+                   [attr.disabled]="!selectedPosition ? '' : null" 
+                   [placeholder]="selectedPosition ? salaryRangeMessage : 'Select position first'" />
+            @if (salaryRequired) {
+                <mat-error><strong>Required</strong></mat-error>
+            }
+            @else if (salaryInvalid) {
+                <mat-error>Must be greater than 0</mat-error>
+            }
+            @else if (salaryOutOfRange) {
+                <mat-error>{{ salaryRangeMessage }}</mat-error>
+            }
+        </mat-form-field>
+    </div>
+
+    <div class="form-actions">
+        <button mat-button type="button" (click)="onCancel()">Cancel</button>
+        <button mat-flat-button color="primary" type="submit" [disabled]="employeeForm.invalid">
+            {{ isEditMode ? 'Update Employee' : 'Create Employee' }}
+        </button>
+    </div>
+</form>

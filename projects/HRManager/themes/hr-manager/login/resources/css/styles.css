@@ -1,0 +1,188 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+
+body,
+html,
+input,
+button,
+select,
+textarea,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+a,
+label,
+span,
+div {
+    font-family: "Poppins", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif !important;
+    line-height: 1.5rem;
+}
+
+body,
+html {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body.login-pf {
+    background: #f4f6fb;
+    min-height: 100vh;
+    height: 100%;
+}
+
+.login-pf {
+    background: none !important;
+    height: 100%;
+}
+
+.login-pf .container {
+    height: 100%;
+    padding: 0 !important;
+}
+
+#kc-container-wrapper {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.login-pf-page {
+    min-height: 100vh;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0 16px;
+}
+
+.login-pf-page .card-pf {
+    width: 100%;
+    max-width: 460px;
+    background: #ffffff;
+    border: none;
+    border-top: 6px solid #0b63d1;
+    border-radius: 8px;
+    padding: 32px 40px 40px;
+    box-shadow: 0 18px 40px rgba(15, 23, 42, 0.12);
+}
+
+#kc-header {
+    text-align: center;
+    margin-bottom: 24px;
+    font-size: 28px;
+    letter-spacing: 6px;
+    color: #a0aec0;
+    text-transform: uppercase;
+    width: 100%;
+    float: none !important;
+}
+
+#kc-page-title {
+    text-align: center;
+    color: #2f2f2f;
+    font-size: 26px;
+    font-weight: 500;
+    margin-bottom: 28px;
+}
+
+#kc-content {
+    width: 100%;
+}
+
+#kc-content-wrapper {
+    width: 100%;
+}
+
+#kc-form-wrapper {
+    margin-top: 0;
+}
+
+#kc-form {
+    width: 100%;
+}
+
+label {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #4b5563;
+    margin-bottom: 6px;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="number"] {
+    width: 100%;
+    border: 1px solid #d6dae2;
+    border-radius: 4px;
+    padding: 12px 14px;
+    font-size: 0.95rem;
+    color: #111827;
+    transition: border 0.2s ease, box-shadow 0.2s ease;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="email"]:focus,
+input[type="number"]:focus {
+    border-color: #0b63d1;
+    box-shadow: 0 0 0 3px rgba(11, 99, 209, 0.15);
+    outline: none;
+}
+
+#kc-form-buttons .btn-primary {
+    width: 100%;
+    background: #0067d8;
+    border: none;
+    padding: 12px 16px;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 4px;
+    transition: background 0.2s ease;
+}
+
+#kc-form-buttons .btn-primary:hover {
+    background: #0354ad;
+}
+
+#kc-form-options,
+#kc-form-options a,
+#kc-registration,
+#kc-registration a {
+    color: #0067d8;
+}
+
+.login-pf-page a:hover {
+    color: #014a9b;
+}
+
+@media (max-width: 768px) {
+    .login-pf-page {
+        padding: 32px 12px 32px;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+    }
+
+    .login-pf-page .card-pf {
+        max-width: 420px;
+        border-top-width: 5px;
+        padding: 28px 24px 32px;
+        box-shadow: 0 12px 28px rgba(15, 23, 42, 0.1);
+    }
+
+    #kc-header {
+        display: none;
+    }
+
+    #kc-page-title {
+        margin-top: 0;
+    }
+}

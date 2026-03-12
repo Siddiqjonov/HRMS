@@ -1,0 +1,62 @@
+.actions-and-table-wrapper {
+  padding-left: 100px;
+  padding-right: 100px;
+  margin-top: 0.5cm;
+  padding-top: 0;
+}
+
+.add-btn {
+  float: right;
+  padding: 0.5rem 1rem;
+  padding-left: 20px;
+  margin-bottom: 2rem;
+}
+
+.schedule-management {
+  display: inline-block;
+  margin-bottom: 2rem;
+}
+
+.schedule-management h2 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  margin: 0;
+}
+
+@media (max-width: 800px) {
+  .actions-and-table-wrapper {
+    padding-left: 16px;
+    padding-right: 16px;
+    margin-top: 1rem;
+  }
+
+  .schedule-management {
+    display: block;
+    width: 100%;
+    margin-bottom: 1rem;
+  }
+
+  .schedule-management h2 {
+    font-size: 1.25rem;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .add-btn {
+    float: none;
+    width: 100%;
+    margin-bottom: 1.5rem;
+    padding: 0.75rem 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .add-btn mat-icon {
+    margin: 0;
+  }
+}
+

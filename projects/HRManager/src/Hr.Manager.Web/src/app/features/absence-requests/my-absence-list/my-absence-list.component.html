@@ -1,0 +1,43 @@
+<app-loading-spinner [loading]="isLoading"></app-loading-spinner>
+
+@if(errorMessage) {
+<app-error-display [message]="errorMessage"></app-error-display>
+}
+
+<div class="actions-and-table-wrapper">
+  <div class="header-section">
+    <div class="my-absence-management">
+      <h2>My Absences <mat-icon>event_busy</mat-icon></h2>
+    </div>
+    <div class="buttons-container">
+      <button class="add-btn" mat-flat-button color="primary" (click)="onAddAbsenceRequest()">
+        Add Absence Request
+      </button>
+      <button mat-raised-button (click)="openFilterDialog()" type="button" class="filter-btn">
+        <mat-icon>filter_list</mat-icon>
+        Filters
+      </button>
+    </div>
+  </div>
+
+  @if (dataSource.data.length === 0 && !isLoading && !errorMessage) {
+    <app-empty-state 
+      [message]="hasActiveFilters ? 'No absence requests found' : 'No absence requests found'"
+      icon="event_busy"
+      [description]="hasActiveFilters ? 'No absence requests match the current filters. Try adjusting your filters or clear them to see all your requests.' : 'Start by adding your first absence request using the button above.'">
+    </app-empty-state>
+  } @else {
+    <app-data-table
+      [dataSource]="dataSource"
+      [displayedColumns]="displayedColumns"
+      [length]="paginationResult?.totalCount || 0"
+      [pageSize]="paginationResult?.pageSize || 10"
+      [pageIndex]="(paginationResult?.page || 1) - 1"
+      [paginatorLabel]="'Absence Requests'"
+      (pageChange)="onPageChange($event)"
+    >
+    </app-data-table>
+  }
+</div>
+
+

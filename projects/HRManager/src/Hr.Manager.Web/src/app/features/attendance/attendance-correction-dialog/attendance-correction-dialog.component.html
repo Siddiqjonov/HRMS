@@ -1,0 +1,33 @@
+<h2 mat-dialog-title>
+  <mat-icon>edit</mat-icon>
+  Correct Attendance Record
+</h2>
+
+<mat-dialog-content>
+  <div class="info-section">
+    <p><strong>Date:</strong> {{ data.date }}</p>
+  </div>
+
+  <div class="form-section">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Check In Time</mat-label>
+      <input matInput type="time" [(ngModel)]="checkInTime" placeholder="HH:mm">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Check Out Time</mat-label>
+      <input matInput type="time" [(ngModel)]="checkOutTime" placeholder="HH:mm">
+    </mat-form-field>
+  </div>
+
+  <div class="current-values">
+    <p><strong>Current Check In:</strong> {{ formatTimeForDisplay(data.checkIn) }}</p>
+    <p><strong>Current Check Out:</strong> {{ formatTimeForDisplay(data.checkOut) }}</p>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="center">
+  <button mat-button (click)="onCancel()">Cancel</button>
+  <button mat-raised-button color="primary" (click)="onSave()">Save</button>
+</mat-dialog-actions>
+

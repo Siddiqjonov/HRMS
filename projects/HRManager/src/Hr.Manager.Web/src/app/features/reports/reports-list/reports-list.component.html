@@ -1,0 +1,101 @@
+<app-loading-spinner [loading]="isLoading"></app-loading-spinner>
+
+<div class="reports-wrapper">
+  <div class="reports-header">
+    <h2 class="reports-title">
+      Reports Management
+      <mat-icon>assessment</mat-icon>
+    </h2>
+  </div>
+
+  <!-- Action Buttons -->
+  <div class="action-buttons">
+    <button mat-raised-button 
+            color="accent" 
+            (click)="openFilterDialog()"
+            [disabled]="!selectedReport">
+      <mat-icon>tune</mat-icon>
+      Filters
+      @if (hasActiveFiltersForSelected()) {
+        <span class="filter-count">({{ getActiveFiltersCountForSelected() }})</span>
+      }
+    </button>
+    <button mat-raised-button 
+            color="primary" 
+            (click)="generateSelectedReport()"
+            [disabled]="!selectedReport || (selectedReport && loadingReportId === selectedReport.id)">
+      @if (selectedReport && loadingReportId === selectedReport.id) {
+        <ng-container>
+          <mat-icon class="spinning">sync</mat-icon>
+          Generating...
+        </ng-container>
+      } @else {
+        <ng-container>
+          <mat-icon>download</mat-icon>
+          Generate
+        </ng-container>
+      }
+    </button>
+  </div>
+
+  <!-- Active Filters Display -->
+  @if (selectedReport && hasActiveFiltersForSelected()) {
+    <div class="active-filters">
+      <div class="filters-container">
+        <span class="filters-label">Active Filters:</span>
+        <div class="filter-chips">
+          @if (selectedReport.availableFilters.includes('dateRange') && (startDate || endDate)) {
+            <div class="filter-chip">
+              <span>
+                @if (startDate && endDate) {
+                  {{ startDate | date: 'shortDate' }} - {{ endDate | date: 'shortDate' }}
+                } @else if (startDate) {
+                  From: {{ startDate | date: 'shortDate' }}
+                } @else if (endDate) {
+                  To: {{ endDate | date: 'shortDate' }}
+                }
+              </span>
+              <button mat-icon-button (click)="startDate = null; endDate = null" class="chip-close">
+                <mat-icon>close</mat-icon>
+              </button>
+            </div>
+          }
+          @if (selectedReport.availableFilters.includes('department') && selectedDepartment) {
+            <div class="filter-chip">
+              <span>Dept: {{ selectedDepartment.name }}</span>
+              <button mat-icon-button (click)="selectedDepartment = null" class="chip-close">
+                <mat-icon>close</mat-icon>
+              </button>
+            </div>
+          }
+          @if (selectedReport.availableFilters.includes('employee') && selectedEmployee) {
+            <div class="filter-chip">
+              <span>Employee: {{ selectedEmployee.fullName }}</span>
+              <button mat-icon-button (click)="selectedEmployee = null" class="chip-close">
+                <mat-icon>close</mat-icon>
+              </button>
+            </div>
+          }
+        </div>
+        <button mat-stroked-button (click)="clearAllFilters()" class="clear-all-btn">
+          <mat-icon>clear_all</mat-icon>
+          Clear All
+        </button>
+      </div>
+    </div>
+  }
+
+  <!-- Reports Table -->
+  <app-data-table 
+    [dataSource]="dataSource" 
+    [displayedColumns]="displayedColumns"
+    [selectedItem]="selectedReport"
+    [getCategoryLabel]="getCategoryLabelFn"
+    [showPagination]="false"
+    [showViewButton]="false"
+    [showEditButton]="false"
+    [showDeleteButton]="false"
+    (rowClick)="onViewReport($event)"
+    (view)="onViewReport($event)">
+  </app-data-table>
+</div>

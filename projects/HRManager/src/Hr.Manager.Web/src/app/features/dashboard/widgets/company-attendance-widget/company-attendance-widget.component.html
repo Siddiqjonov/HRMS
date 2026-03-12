@@ -1,0 +1,95 @@
+@if (isLoading) {
+  <app-widget-skeleton 
+    type="stats" 
+    title="Company-wide Attendance" 
+    subtitle="Today's Overview">
+  </app-widget-skeleton>
+} @else {
+  <mat-card class="company-attendance-card">
+    <mat-card-header>
+      <mat-card-title>Company-wide Attendance</mat-card-title>
+      <mat-card-subtitle>Today's Overview</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+    <div class="attendance-overview">
+      <div class="overview-circle">
+        <div class="circle-content">
+          <span class="rate">{{ attendanceRate }}%</span>
+          <span class="label">Present</span>
+        </div>
+      </div>
+      <div class="overview-info">
+        <div class="info-item">
+          <span class="info-label">Total Employees</span>
+          <span class="info-value">{{ attendance.totalEmployees }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="attendance-breakdown">
+      <div class="breakdown-item present">
+        <div class="breakdown-header">
+          <div class="breakdown-label">
+            <mat-icon>check_circle</mat-icon>
+            <span>Present</span>
+          </div>
+          <span class="breakdown-value">{{ safePresent }}</span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" [style.width.%]="presentPercentage"></div>
+        </div>
+      </div>
+
+      <div class="breakdown-item remote">
+        <div class="breakdown-header">
+          <div class="breakdown-label">
+            <mat-icon>home</mat-icon>
+            <span>Remote</span>
+          </div>
+          <span class="breakdown-value">{{ safeRemoteWorking }}</span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" [style.width.%]="remotePercentage"></div>
+        </div>
+      </div>
+
+      <div class="breakdown-item leave">
+        <div class="breakdown-header">
+          <div class="breakdown-label">
+            <mat-icon>event_available</mat-icon>
+            <span>On Leave</span>
+          </div>
+          <span class="breakdown-value">{{ safeOnLeave }}</span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" [style.width.%]="leavePercentage"></div>
+        </div>
+      </div>
+
+      <div class="breakdown-item absent">
+        <div class="breakdown-header">
+          <div class="breakdown-label">
+            <mat-icon>cancel</mat-icon>
+            <span>Absent</span>
+          </div>
+          <span class="breakdown-value">{{ safeAbsent }}</span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" [style.width.%]="absentPercentage"></div>
+        </div>
+      </div>
+
+      <div class="breakdown-item late">
+        <div class="breakdown-header">
+          <div class="breakdown-label">
+            <mat-icon>schedule</mat-icon>
+            <span>Late</span>
+          </div>
+          <span class="breakdown-value">{{ safeLate }}</span>
+        </div>
+      </div>
+    </div>
+    </mat-card-content>
+  </mat-card>
+}
+

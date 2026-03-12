@@ -1,0 +1,52 @@
+@if (isLoading) {
+  <app-widget-skeleton type="list"></app-widget-skeleton>
+} @else {
+  <mat-card class="pending-approvals-card">
+    <mat-card-header>
+      <mat-card-title>Pending Approvals</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      @if (approvals.length > 0) {
+      <div class="approvals-list">
+        @for (approval of approvals; track approval.id) {
+          <div class="approval-item">
+            <div class="approval-header">
+              <div class="approval-user">
+                <mat-icon>person</mat-icon>
+                <span>{{ approval.employeeName }}</span>
+              </div>
+              <span class="approval-type">{{ getTypeText(approval.type) }}</span>
+            </div>
+            <div class="approval-details">
+              <div class="detail-item">
+                <mat-icon>date_range</mat-icon>
+                <span>{{ formatDate(approval.startDate) }} - {{ formatDate(approval.endDate) }}</span>
+              </div>
+              <div class="detail-item">
+                <mat-icon>event</mat-icon>
+                <span>{{ approval.daysRequested }} day{{ approval.daysRequested > 1 ? 's' : '' }}</span>
+              </div>
+            </div>
+            <div class="approval-actions">
+              <button mat-raised-button color="primary" (click)="onApprove(approval.id)">
+                <mat-icon>check</mat-icon>
+                Approve
+              </button>
+              <button mat-raised-button color="warn" (click)="onReject(approval.id)">
+                <mat-icon>close</mat-icon>
+                Reject
+              </button>
+            </div>
+          </div>
+        }
+      </div>
+    } @else {
+      <div class="empty-state">
+        <mat-icon>done_all</mat-icon>
+        <p>No pending approvals</p>
+      </div>
+      }
+    </mat-card-content>
+  </mat-card>
+}
+

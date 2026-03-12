@@ -1,0 +1,42 @@
+<h2 mat-dialog-title>Select Department</h2>
+
+<mat-dialog-content>
+  @if (loading) {
+    <div class="loading-container">
+      <mat-progress-spinner mode="indeterminate" diameter="40"></mat-progress-spinner>
+      <p>Loading departments...</p>
+    </div>
+  } @else if (departments.length === 0) {
+    <app-empty-state 
+      message="No departments found" 
+      icon="business"
+      description="Please create a department first.">
+    </app-empty-state>
+  } @else {
+    <div class="departments-list">
+      @for (department of departments; track department.id) {
+        <div 
+          class="department-item"
+          [class.selected]="selectedDepartment?.id === department.id"
+          (click)="selectDepartment(department)">
+          <div class="department-info">
+            <mat-icon>business_center</mat-icon>
+            <span class="department-name">{{ department.name }}</span>
+            <mat-icon 
+              class="visibility-icon" 
+              (click)="viewDepartmentDetails(department, $event)">
+              visibility
+            </mat-icon>
+          </div>
+          @if (selectedDepartment?.id === department.id) {
+            <mat-icon class="check-icon">check_circle</mat-icon>
+          }
+        </div>
+      }
+    </div>
+  }
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">Cancel</button>
+  <button mat-flat-button color="primary" [disabled]="!selectedDepartment" (click)="onConfirm()">Confirm Selection</button>
+</mat-dialog-actions>

@@ -1,0 +1,149 @@
+.team-attendance-card {
+  height: 100%;
+}
+
+.attendance-summary {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.summary-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  border-radius: 8px;
+}
+
+.summary-item.present {
+  background: #e8f5e9;
+}
+
+.summary-item.present mat-icon {
+  color: #4caf50;
+}
+
+.summary-item.late {
+  background: #fff3e0;
+}
+
+.summary-item.late mat-icon {
+  color: #ff9800;
+}
+
+.summary-item.absent {
+  background: #ffebee;
+}
+
+.summary-item.absent mat-icon {
+  color: #f44336;
+}
+
+.summary-item.on-leave {
+  background: #e3f2fd;
+}
+
+.summary-item.on-leave mat-icon {
+  color: #2196f3;
+}
+
+.summary-item mat-icon {
+  font-size: 32px;
+  width: 32px;
+  height: 32px;
+}
+
+.summary-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.summary-text .count {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #333;
+  line-height: 1;
+}
+
+.summary-text .label {
+  font-size: 0.75rem;
+  color: #666;
+  text-transform: uppercase;
+}
+
+.team-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.team-member {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  background: #f5f5f5;
+  border-radius: 6px;
+  border-left: 3px solid;
+}
+
+.team-member.status-present {
+  border-left-color: #4caf50;
+}
+
+.team-member.status-late {
+  border-left-color: #ff9800;
+}
+
+.team-member.status-absent {
+  border-left-color: #f44336;
+}
+
+.team-member.status-on-leave {
+  border-left-color: #2196f3;
+}
+
+.member-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.status-icon {
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+}
+
+.member-name {
+  font-weight: 500;
+  color: #333;
+}
+
+.check-in-time {
+  font-size: 0.875rem;
+  color: #666;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: #999;
+}
+
+.empty-state mat-icon {
+  font-size: 48px;
+  width: 48px;
+  height: 48px;
+  margin-bottom: 1rem;
+}
+
+.empty-state p {
+  margin: 0;
+  font-size: 1rem;
+}
+

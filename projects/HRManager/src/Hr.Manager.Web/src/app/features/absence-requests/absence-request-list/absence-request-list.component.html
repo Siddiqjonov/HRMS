@@ -1,0 +1,45 @@
+<app-loading-spinner [loading]="isLoading"></app-loading-spinner>
+
+@if(errorMessage) {
+<app-error-display [message]="errorMessage"></app-error-display>
+}
+
+<div class="actions-and-table-wrapper">
+  <div class="header-section">
+    <div class="absence-request-management">
+      <h2>Absence Request Management <mat-icon>event_busy</mat-icon></h2>
+    </div>
+    <div class="buttons-container">
+      <button mat-raised-button (click)="openFilterDialog()" type="button" class="filter-btn">
+        <mat-icon>filter_list</mat-icon>
+        Filters
+      </button>
+    </div>
+  </div>
+
+  @if (dataSource.data.length === 0 && !isLoading && !errorMessage) {
+  <app-empty-state
+    [message]="hasActiveFilters ? 'No absence requests found' : 'No absence requests found'"
+    icon="event_busy"
+    [description]="hasActiveFilters ? 'No absence requests match the current filters. Try adjusting your filters or clear them to see all requests.' : 'No absence requests found in the system.'"
+  >
+  </app-empty-state>
+  } @else {
+  <app-data-table
+    [dataSource]="dataSource"
+    [displayedColumns]="displayedColumns"
+    [length]="paginationResult?.totalCount || 0"
+    [pageSize]="paginationResult?.pageSize || 10"
+    [pageIndex]="(paginationResult?.page || 1) - 1"
+    [paginatorLabel]="'Absence Requests'"
+    [showViewButton]="false"
+    [showEditButton]="false"
+    [showDeleteButton]="false"
+    [showApproveReject]="true"
+    (pageChange)="onPageChange($event)"
+    (approve)="onApproveAbsenceRequest($event)"
+    (reject)="onRejectAbsenceRequest($event)"
+  >
+  </app-data-table>
+  }
+</div>

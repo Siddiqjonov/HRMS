@@ -1,0 +1,82 @@
+<form [formGroup]="scheduleForm" (ngSubmit)="onSubmit()" class="create-schedule-form">
+  <h2>{{ isEditMode ? 'Edit Schedule' : 'Create Schedule' }}</h2>
+
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Schedule Name</mat-label>
+    <input matInput formControlName="name" placeholder="Enter schedule name" />
+    @if (nameIsRequired) {
+    <mat-error> Name is <strong>required</strong> </mat-error>
+    } @if (nameHasLengthError) {
+    <mat-error> Name must be between 3 and 100 characters </mat-error>
+    }
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Description</mat-label>
+    <textarea
+      matInput
+      formControlName="description"
+      placeholder="Enter schedule description"
+      rows="3"
+    ></textarea>
+    @if (descriptionIsRequired) {
+    <mat-error> Description is <strong>required</strong> </mat-error>
+    }@if (descriptionHasLengthError) {
+    <mat-error>Description must not exceed 250 characters</mat-error>
+    }
+  </mat-form-field>
+
+  <div class="time-section">
+    <h3><mat-icon>access_time</mat-icon> Working Hours</h3>
+    
+    <div class="time-inputs">
+      <mat-form-field appearance="outline" class="time-field">
+        <mat-label>Start Time</mat-label>
+        <input 
+          matInput 
+          formControlName="startTime" 
+          [matTimepicker]="startPicker"
+        />
+        <mat-timepicker-toggle matIconSuffix [for]="startPicker"/>
+        <mat-timepicker #startPicker/>
+        @if (startTimeIsRequired) {
+        <mat-error>Start time is <strong>required</strong></mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="time-field">
+        <mat-label>End Time</mat-label>
+        <input 
+          matInput 
+          formControlName="endTime" 
+          [matTimepicker]="endPicker"
+        />
+        <mat-timepicker-toggle matIconSuffix [for]="endPicker"/>
+        <mat-timepicker #endPicker/>
+        @if (endTimeIsRequired) {
+        <mat-error>End time is <strong>required</strong></mat-error>
+        }
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="days-section">
+    <h3><mat-icon>today</mat-icon> Working Days</h3>
+    <div class="days-grid">
+      <mat-checkbox formControlName="monday">Monday</mat-checkbox>
+      <mat-checkbox formControlName="tuesday">Tuesday</mat-checkbox>
+      <mat-checkbox formControlName="wednesday">Wednesday</mat-checkbox>
+      <mat-checkbox formControlName="thursday">Thursday</mat-checkbox>
+      <mat-checkbox formControlName="friday">Friday</mat-checkbox>
+      <mat-checkbox formControlName="saturday">Saturday</mat-checkbox>
+      <mat-checkbox formControlName="sunday">Sunday</mat-checkbox>
+    </div>
+  </div>
+
+  <div class="form-actions">
+    <button type="submit" mat-flat-button color="primary" [disabled]="scheduleForm.invalid">
+      {{ isEditMode ? 'Update Schedule' : 'Create Schedule' }}
+    </button>
+  </div>
+</form>
+

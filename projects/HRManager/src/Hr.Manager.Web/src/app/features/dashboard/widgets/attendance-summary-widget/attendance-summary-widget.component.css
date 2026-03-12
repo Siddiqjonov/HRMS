@@ -1,0 +1,105 @@
+.attendance-summary-card {
+  height: 100%;
+}
+
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 3rem;
+  color: #666;
+}
+
+.spinning {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.summary-stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+}
+
+.stat-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  border-radius: 8px;
+  transition: transform 0.2s ease;
+}
+
+.stat-item:hover {
+  transform: translateY(-2px);
+}
+
+.stat-item.late {
+  background: #fff3e0;
+}
+
+.stat-item.late .stat-icon {
+  color: #ff9800;
+}
+
+.stat-item.early-departure {
+  background: #fce4ec;
+}
+
+.stat-item.early-departure .stat-icon {
+  color: #e91e63;
+}
+
+.stat-item.hours {
+  background: #e3f2fd;
+}
+
+.stat-item.hours .stat-icon {
+  color: #2196f3;
+}
+
+.stat-item.overtime {
+  background: #f3e5f5;
+}
+
+.stat-item.overtime .stat-icon {
+  color: #9c27b0;
+}
+
+.stat-item.average {
+  background: #e0f2f1;
+}
+
+.stat-item.average .stat-icon {
+  color: #009688;
+}
+
+.stat-icon {
+  font-size: 32px;
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+}
+
+.stat-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.stat-value {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #333;
+}
+
+.stat-label {
+  font-size: 0.75rem;
+  color: #666;
+  text-transform: uppercase;
+}
+
