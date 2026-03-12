@@ -97,38 +97,54 @@ jobs:
             --project=${{ env.PROJECT_ID }} \
             --format='value(status.url)' 2>/dev/null || echo "")
           if [ -z "$KC_URL" ]; then
-            echo "WARNING: Keycloak service not found. Deploy keycloak-setup-firebase.yml first."
+            echo "WARNING: Keycloak service not found. Deploy keycloak-setup-prod.yml first."
             KC_URL="https://keycloak-not-deployed-yet.run.app"
           fi
           echo "url=${KC_URL}" >> $GITHUB_OUTPUT
           echo "Keycloak URL: ${KC_URL}"
 
+      - name: Store Firebase SA key in Secret Manager
+        run: |
+          echo '${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON }}' | \
+            gcloud secrets create firebase-sa-key --data-file=- \
+              --project=${{ env.PROJECT_ID }} 2>/dev/null || \
+          echo '${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON }}' | \
+            gcloud secrets versions add firebase-sa-key --data-file=- \
+              --project=${{ env.PROJECT_ID }}
+          echo "Secret stored successfully"
+
+      - name: Store DB connection string in Secret Manager
+        run: |
+          printf '%s' '${{ secrets.DATABASE_CONNECTION_STRING_PROD }}' | \
+            gcloud secrets create db-connection-string --data-file=- \
+              --project=${{ env.PROJECT_ID }} 2>/dev/null || \
+          printf '%s' '${{ secrets.DATABASE_CONNECTION_STRING_PROD }}' | \
+            gcloud secrets versions add db-connection-string --data-file=- \
+              --project=${{ env.PROJECT_ID }}
+          echo "DB secret stored successfully"
+
       - name: Deploy backend to Cloud Run
-        uses: google-github-actions/deploy-cloudrun@v2
-        with:
-          service: ${{ env.SERVICE_NAME }}
-          image: ${{ env.IMAGE }}:${{ github.sha }}
-          region: ${{ env.REGION }}
-          project_id: ${{ env.PROJECT_ID }}
-          flags: >-
-            --allow-unauthenticated
-            --port=5000
-            --cpu=1
-            --memory=1Gi
-            --min-instances=0
-            --max-instances=3
-          env_vars: |
-            ASPNETCORE_ENVIRONMENT=Production
-            ASPNETCORE_HTTP_PORTS=5000
-            ConnectionStrings__Database=${{ secrets.DATABASE_CONNECTION_STRING_PROD }}
-            FirebaseStorage__ServiceAccountKeyJson=${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON }}
-            Keycloak__MetadataAddress=${{ steps.keycloak.outputs.url }}/realms/hr-manager/.well-known/openid-configuration
-            Keycloak__ValidIssuer=${{ steps.keycloak.outputs.url }}/realms/hr-manager
-            Keycloak__Audience=account
-            Cors__AllowedOrigins__0=https://hrmanager-c32f0.web.app
-            Cors__AllowedOrigins__1=https://hrmanager-c32f0.firebaseapp.com
-            Cors__AllowedOrigins__2=http://localhost
-            Cors__AllowedOrigins__3=http://localhost:4200
+        run: |
+          gcloud run deploy ${{ env.SERVICE_NAME }} \
+            --image=${{ env.IMAGE }}:${{ github.sha }} \
+            --region=${{ env.REGION }} \
+            --project=${{ env.PROJECT_ID }} \
+            --allow-unauthenticated \
+            --port=5000 \
+            --cpu=1 \
+            --memory=1Gi \
+            --min-instances=0 \
+            --max-instances=3 \
+            --set-secrets="FirebaseStorage__ServiceAccountKeyJson=firebase-sa-key:latest,ConnectionStrings__Database=db-connection-string:latest" \
+            --set-env-vars="ASPNETCORE_ENVIRONMENT=Production" \
+            --update-env-vars="ASPNETCORE_HTTP_PORTS=5000" \
+            --update-env-vars="Keycloak__MetadataAddress=${{ steps.keycloak.outputs.url }}/realms/hr-manager/.well-known/openid-configuration" \
+            --update-env-vars="Keycloak__ValidIssuer=${{ steps.keycloak.outputs.url }}/realms/hr-manager" \
+            --update-env-vars="Keycloak__Audience=account" \
+            --update-env-vars="Cors__AllowedOrigins__0=https://hrmanager-c32f0.web.app" \
+            --update-env-vars="Cors__AllowedOrigins__1=https://hrmanager-c32f0.firebaseapp.com" \
+            --update-env-vars="Cors__AllowedOrigins__2=http://localhost" \
+            --update-env-vars="Cors__AllowedOrigins__3=http://localhost:4200"
 
       - name: Deployment Summary
         run: |
