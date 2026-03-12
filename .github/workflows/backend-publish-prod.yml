@@ -53,7 +53,7 @@ jobs:
       - name: Enable required GCP APIs
         run: |
           gcloud services enable run.googleapis.com artifactregistry.googleapis.com \
-            --project=${{ env.PROJECT_ID }} --quiet
+            --project=${{ env.PROJECT_ID }} --quiet 2>/dev/null || echo "APIs already enabled or permission denied (non-fatal)"
 
       - name: Create Artifact Registry repository (if needed)
         run: |
