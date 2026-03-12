@@ -137,7 +137,7 @@ jobs:
             --min-instances=0 \
             --max-instances=3 \
             --set-secrets="FirebaseStorage__ServiceAccountKeyJson=firebase-sa-key:latest,ConnectionStrings__Database=db-connection-string:latest" \
-            --set-env-vars="ASPNETCORE_ENVIRONMENT=Production,ASPNETCORE_HTTP_PORTS=5000,Keycloak__MetadataAddress=${KC_URL}/realms/hr-manager/.well-known/openid-configuration,Keycloak__ValidIssuer=${KC_URL}/realms/hr-manager,Keycloak__Audience=account,Cors__AllowedOrigins__0=https://hrmanager-c32f0.web.app,Cors__AllowedOrigins__1=https://hrmanager-c32f0.firebaseapp.com,Cors__AllowedOrigins__2=http://localhost,Cors__AllowedOrigins__3=http://localhost:4200"
+            --set-env-vars="ASPNETCORE_ENVIRONMENT=Production,ASPNETCORE_HTTP_PORTS=5000,EmailConfiguration__Password=not-configured,Keycloak__MetadataAddress=${KC_URL}/realms/hr-manager/.well-known/openid-configuration,Keycloak__ValidIssuer=${KC_URL}/realms/hr-manager,Keycloak__Audience=account,Cors__AllowedOrigins__0=https://hrmanager-c32f0.web.app,Cors__AllowedOrigins__1=https://hrmanager-c32f0.firebaseapp.com,Cors__AllowedOrigins__2=http://localhost,Cors__AllowedOrigins__3=http://localhost:4200"
 
       - name: Deployment Summary
         run: |
