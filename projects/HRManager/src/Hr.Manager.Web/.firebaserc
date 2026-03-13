@@ -1,5 +1,14 @@
 {
   "projects": {
     "default": "hrmanager-c32f0"
+  },
+  "targets": {
+    "hrmanager-c32f0": {
+      "hosting": {
+        "prod": [
+          "hr-manager-uz"
+        ]
+      }
+    }
   }
 }

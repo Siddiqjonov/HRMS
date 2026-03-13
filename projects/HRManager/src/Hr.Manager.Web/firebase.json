@@ -1,5 +1,6 @@
 {
   "hosting": {
+    "target": "prod",
     "public": "dist/Hr.Manager.Web/browser",
     "ignore": [
       "firebase.json",
