@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "target": "prod",
+    "site": "hr-manager-uz",
     "public": "dist/Hr.Manager.Web/browser",
     "ignore": [
       "firebase.json",
